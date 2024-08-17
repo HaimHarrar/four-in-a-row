@@ -1,0 +1,6 @@
+.boardContainer {
+    width: 45rem;
+    height: 38.5rem;
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+}

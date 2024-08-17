@@ -1,0 +1,71 @@
+.appContainer {
+    background-color: rgb(157, 206, 203);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .arrow {
+        position: absolute;
+        height: 2rem;
+        width: 2rem;
+        top: 2.5rem;
+        &[turn="1"] {
+            right: 8rem;
+            filter: brightness(0) saturate(100%) invert(39%) sepia(47%) saturate(1525%) hue-rotate(33deg) brightness(104%) contrast(91%);
+        }
+        &[turn="2"] {
+            left: 8rem;
+            filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+        }
+    }
+
+    .crown {
+        position: absolute;
+        height: 25rem;
+        width: 25rem;
+        &[turn="1"] {
+            filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+        }
+        &[turn="2"] {
+            filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+        }
+        animation:  3s backwards infinite;
+        animation-name: example;
+        // animation-duration: 4s;
+    }
+    @keyframes example {
+        100% { transform: rotate(360deg) };
+    }
+
+    .firstPlayer {
+        width: 8rem;
+        height: 2rem;
+        background-color: #c24646;
+        position: absolute;
+        top: 5rem;
+        left: 5rem;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 8px 4px rgb(99, 2, 2);
+        color: rgb(73, 18, 18);
+    }
+    
+    .secondPlayer {
+        width: 8rem;
+        height: 2rem;
+        background-color: #83830b;
+        position: absolute;
+        top: 5rem;
+        right: 5rem;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 8px 4px rgb(68, 68, 13);
+        color: rgb(42, 48, 6);
+    }
+}
