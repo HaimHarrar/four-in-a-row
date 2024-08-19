@@ -2,34 +2,48 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styles from '../styles/Board.module.scss'
 import Square from './Square'
 import { statusEnum } from '../App'
+import { clientIO } from '../utils/io'
 
-const Board = ({turnsCount, setTurnsCount, currentPlayer, setIsThereWinner, isThereWinner}) => {
-  const [squareArray, setSquareArray] = useState(Array(42).fill(0).map(() => statusEnum.EMPTY))
+const Board = ({board, setBoard, turnsCount, setTurnsCount, currentPlayer, isCurrentPlayerTurn, setIsThereWinner, isThereWinner}) => {
+  
+  useEffect(() => {
+    const onPlay = ({board, next}) => {
+      if(next){
+        setBoard(board)
+        setTurnsCount(prev => prev + 1)
+      }
+    }
+    
+    clientIO.on("play", onPlay)
+    return () => {
+      clientIO.off("play", onPlay)
+    }
+  })
   useEffect(() => {
     for(let i = 41; i >= 0; i--){
-      if(squareArray[i]){
+      if(board[i]){
 
         if(i + 3 < 42){
-          if((squareArray[i] === squareArray[i + 1]) && (squareArray[i] === squareArray[i + 2]) && (squareArray[i] === squareArray[i + 3])){
-            console.log(squareArray[i] + " winner");
+          if((board[i] === board[i + 1]) && (board[i] === board[i + 2]) && (board[i] === board[i + 3])){
+            console.log(board[i] + " winner");
             setIsThereWinner(true)
           }
         }
         if(i + 21 < 42){
-          if((squareArray[i] === squareArray[i + 7]) && (squareArray[i] === squareArray[i + 14]) && (squareArray[i] === squareArray[i + 21])){
-            console.log(squareArray[i] + " winner");
+          if((board[i] === board[i + 7]) && (board[i] === board[i + 14]) && (board[i] === board[i + 21])){
+            console.log(board[i] + " winner");
             setIsThereWinner(true)
           }
         }
         if(i + 24 < 42){
-          if((squareArray[i] === squareArray[i + 8]) && (squareArray[i] === squareArray[i + 16]) && (squareArray[i] === squareArray[i + 24])){
-            console.log(squareArray[i] + " winner");
+          if((board[i] === board[i + 8]) && (board[i] === board[i + 16]) && (board[i] === board[i + 24])){
+            console.log(board[i] + " winner");
             setIsThereWinner(true)
           }
         }
         if(i + 18 < 42){
-          if((squareArray[i] === squareArray[i + 6]) && (squareArray[i] === squareArray[i + 12]) && (squareArray[i] === squareArray[i + 18])){
-            console.log(squareArray[i] + " winner");
+          if((board[i] === board[i + 6]) && (board[i] === board[i + 12]) && (board[i] === board[i + 18])){
+            console.log(board[i] + " winner");
             setIsThereWinner(true)
           }
         }
@@ -40,29 +54,17 @@ const Board = ({turnsCount, setTurnsCount, currentPlayer, setIsThereWinner, isTh
   return (
     <div className={styles.boardContainer}>
         {
-            squareArray.map((fill, index) =>(
+            board.map((fill, index) =>(
             <Square 
               isThereWinner={isThereWinner}
               key={index}
               index={index}
               fill={fill}
               playByIndex={(index) => {
-                if(isThereWinner) return false
-                const findFreeSquare = (column) => {
-                  for(let i = 41 - (6 - column); i >= 0 ; i -= 7){
-                    if(!(squareArray[i])) return i
-                  }
-                  return false
-                }
-                const finalIndex = findFreeSquare(index % 7);
-                if(finalIndex) {
-                  setSquareArray((prev) => {
-                    const newArray = [...prev]
-                    newArray[finalIndex] = currentPlayer;
-                    return newArray
-                  })
-                  setTurnsCount(prev => prev + 1);
-                }
+                console.log(isCurrentPlayerTurn);
+                
+                if(isThereWinner || !isCurrentPlayerTurn) return false
+                clientIO.emit("play", ({index, color: currentPlayer}))
               }} 
             />))
         }

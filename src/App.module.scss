@@ -29,43 +29,52 @@
             filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
         }
         &[turn="2"] {
-            filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+            filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
         }
-        animation:  3s backwards infinite;
-        animation-name: example;
-        // animation-duration: 4s;
+        animation-name: rotate;
+        animation:  3s forwards infinite;
     }
-    @keyframes example {
+
+    @keyframes rotate{
         100% { transform: rotate(360deg) };
     }
 
-    .firstPlayer {
-        width: 8rem;
-        height: 2rem;
-        background-color: #c24646;
+    .player {
         position: absolute;
-        top: 5rem;
-        left: 5rem;
-        border-radius: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 0 8px 4px rgb(99, 2, 2);
-        color: rgb(73, 18, 18);
-    }
-    
-    .secondPlayer {
-        width: 8rem;
-        height: 2rem;
-        background-color: #83830b;
-        position: absolute;
-        top: 5rem;
-        right: 5rem;
-        border-radius: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 0 8px 4px rgb(68, 68, 13);
-        color: rgb(42, 48, 6);
+
+        .name{
+            width: 8rem;
+            height: 2rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .turn {
+            padding: 1rem 0;
+            text-align: center;
+        }
+        &.first {
+            top: 5rem;
+            left: 5rem;
+            .name {
+            background-color: #c24646;
+
+                box-shadow: 0 0 8px 4px rgb(99, 2, 2);
+                color: rgb(73, 18, 18);
+            }
+        }
+        &.second {
+            top: 5rem;
+            right: 5rem;
+
+            .name { 
+                background-color: #83830b;
+                box-shadow: 0 0 8px 4px rgb(68, 68, 13);
+                color: rgb(42, 48, 6);
+            }
+        }
+
     }
 }
+
