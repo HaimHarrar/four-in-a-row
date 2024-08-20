@@ -19,12 +19,11 @@ function App() {
   const currentPlayer = useMemo(() => turnsCount % 2 ? statusEnum.YELLOW : statusEnum.RED, [turnsCount])
   const isCurrentPlayerTurn = useMemo(() => currentPlayer === playerColor, [playerColor, currentPlayer])
   const [canStart, setCanStart] = useState(false)
-  const [board, setBoard] = useState([]);
-  const [isWaitingForPlayer, setIsWaitingForPlayer] = useState(false);
-  useEffect(() => console.log(isThereWinner), [isThereWinner])
+  const [board, setBoard] = useState();
+  const [isWaitingForPlayer, setIsWaitingForPlayer] = useState(false);;
   
   useEffect(() => {
-    // clientIO.connect();
+    clientIO.connect();
 
     const onGetColor = ({playerColor}) => {
       setPlayerColor(playerColor);
@@ -38,7 +37,6 @@ function App() {
     }
 
     const playerLeft = () => {
-      clientIO.disconnect();
       setCanStart(false)
       setIsWaitingForPlayer(false)
     }

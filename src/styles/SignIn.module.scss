@@ -1,5 +1,9 @@
 .signInContainer {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 
     .loader{
         height: 8rem;
@@ -10,35 +14,25 @@
     @keyframes loader {
         100% { transform: rotate(360deg) };
     }
-    .header {
-        margin: 3rem 0;
-        font-weight: bold;
-        font-size: 1.3rem;
-
-    }
-    .input {
-        // background-color: blue;
-        // margin: auto;
-        height: 3rem;
-        width: 25rem;
-        border-radius: 7px;
-        border: none;
-        outline: none;
-        padding-left: 5px;
-    }
-    .send {
-        // margin: 3rem 0;
-        position: absolute;
+    .inputContainer {
+    position: relative;
+        .input {
+            height: 3rem;
+            width: 25rem;
+            border-radius: 7px;
+            border: none;
+            outline: none;
+            padding-left: 5px;
+        }
         
-        top: 1px;
-        right: 1px;
-
-        height: 3rem;
-        width: 3rem;
-        // right: 0.2rem;
-        // top: 0.1rem;
-        cursor: pointer;
+        .send {
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            height: 3rem;
+            width: 3rem;
+            cursor: pointer;
+        }
     }
-    // padding: 15rem;
 
 }

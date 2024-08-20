@@ -15,6 +15,7 @@ const statusEnum = {
 const board2Darray = new Map()
 const playersSet = new Map()
 let firstName = ""
+
 io.on('connection', client => {
     let roomIndex
     client.on("playerEnter", ({name}) => {
@@ -27,12 +28,10 @@ io.on('connection', client => {
             board2Darray.set(roomIndex, Array(42).fill(statusEnum.EMPTY));
             client.emit("getColor", {playerColor: statusEnum.YELLOW, name})
             io.to(roomIndex).emit("startPlaying", {board: board2Darray.get(roomIndex), names: {first: firstName, second: name}})
-            console.log("startPlaying");
             console.info("starting game");
-            
         }else {
             firstName = name
-            client.emit("getColor", {playerColor: statusEnum.RED, name});
+            client.emit("getColor", { playerColor: statusEnum.RED, name });
         }
     })
    
@@ -52,15 +51,10 @@ io.on('connection', client => {
         return false; 
     });
 
-    client.on('disconnect', async () => {
+    client.on('disconnect', (client) => {
         // need to delete all the room
-        
-        const a = await io.in(roomIndex).fetchSockets()
-        const secondClientId = a[0].id
-        playersSet.delete(secondClientId)
-        playersSet.delete(client.id)
-        io.to(roomIndex).emit("playerLeft")
-        io.of("/").in(roomIndex).disconnectSockets()
+        io.to(roomIndex).emit("playerLeft");
+        playersSet.delete(client.id);
     });
 });
 server.listen(port);
