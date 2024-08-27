@@ -11,6 +11,7 @@ export const statusEnum = {
   YELLOW: 1,
   RED: 2
 }
+
 function App() {
   const [playersName, setPlayersName] = useState({[statusEnum.RED]: "", [statusEnum.YELLOW]: ""});
   const [playerColor, setPlayerColor] = useState() 

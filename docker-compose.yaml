@@ -1,0 +1,15 @@
+services:
+  image-4-in-a-row-server:
+    build: ./server
+    container_name: container-4-in-a-row-server
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./server:/app
+  image-4_in-a-row-client:
+    build: ./
+    container_name: container-4-in-a-row-client
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    tty: true

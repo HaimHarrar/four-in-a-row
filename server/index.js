@@ -6,7 +6,7 @@ const io = require('socket.io')(server, {
     }
 });
 
-const port = 3000
+const port = 4000
 const statusEnum = {
     EMPTY: 0,
     YELLOW: 1,
@@ -27,7 +27,7 @@ io.on('connection', client => {
         if(playersSet.size && !(playersSet.size % 2)){
             board2Darray.set(roomIndex, Array(42).fill(statusEnum.EMPTY));
             client.emit("getColor", {playerColor: statusEnum.YELLOW, name})
-            io.to(roomIndex).emit("startPlaying", {board: board2Darray.get(roomIndex), names: {first: firstName, second: name}})
+            io.to(roomIndex).emit("startPlaying", { board: board2Darray.get(roomIndex), names: { first: firstName, second: name }})
             console.info("starting game");
         }else {
             firstName = name
@@ -57,4 +57,6 @@ io.on('connection', client => {
         playersSet.delete(client.id);
     });
 });
-server.listen(port);
+server.listen(port, () => {
+    console.log(`server is running at port:..ds ${port}`)
+});
