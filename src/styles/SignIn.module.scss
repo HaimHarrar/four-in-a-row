@@ -1,38 +1,50 @@
 .signInContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100%;
-    width: 100%;
 
-    .loader{
-        height: 8rem;
-        width: 8rem;
-        animation:  3s backwards infinite;
-        animation-name: loader;
-    }
-    @keyframes loader {
-        100% { transform: rotate(360deg) };
-    }
     .inputContainer {
-    position: relative;
-        .input {
-            height: 3rem;
-            width: 25rem;
-            border-radius: 7px;
-            border: none;
-            outline: none;
-            padding-left: 5px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+
+        .nameInputContainer {
+            position: relative;
+            .input {
+                height: 3rem;
+                width: 25rem;
+                border-radius: 7px;
+                border: none;
+                outline: none;
+                padding-left: 5px;
+            }
+
+            .send {
+                position: absolute;
+                top: 1px;
+                right: 1px;
+                height: 3rem;
+                width: 3rem;
+                cursor: pointer;
+            }
         }
-        
-        .send {
-            position: absolute;
-            top: 1px;
-            right: 1px;
-            height: 3rem;
-            width: 3rem;
+
+        .createRoomBtn{
+            padding: 1em;
+            border: 1px solid black;
+            border-radius: 5px;
+            background-color: rgb(68, 101, 101); 
             cursor: pointer;
+            color: rgb(208, 247, 207);
+            &:hover{
+                background-color: rgb(83, 138, 93);
+            }
+        }
+
+        .inputSelectorContainer{
+            width: 15em;
         }
     }
-
 }
