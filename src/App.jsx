@@ -21,8 +21,9 @@ function App() {
   const currentPlayer = useMemo(() => turnsCount % 2 ? statusEnum.YELLOW : statusEnum.RED, [turnsCount])
   const isAllowedToPlay = useMemo(() => currentPlayer === playerColor, [playerColor, currentPlayer])
   const [canStartGame, setCanPlay] = useState(false)
+  const [roomsList, setRoomsList] = useState(new Set());
   const [board, setBoard] = useState();
-  
+  const [loaderTitle, setLoaderTitle] = useState("Waiting for player...")
   useEffect(() => {
     clientIO.connect();
 
@@ -35,6 +36,7 @@ function App() {
 
     const playerLeft = () => {
       setCanPlay(false)
+      setLoaderTitle("player left")
     } 
     const onPlay = ({board, next}) => {
       if(next){
@@ -50,23 +52,32 @@ function App() {
       setPlayerColor(color)
     }
 
+    const setSpceficRooms = (rooms) => {
+      console.log(rooms)
+      setRoomsList(rooms);
+    }
+
+    const onWaitForSpecificRoom = ({room}) => {
+      setLoaderTitle(`Waiting for player in ${room}...`)
+    }
     clientIO.on("play", onPlay)
     clientIO.on("startPlaying", startPlaying)
     clientIO.on("playerEnterData", setPlayerData)
     clientIO.on("winner", onWinner)
-
+    clientIO.on("updateSpecificRooms", setSpceficRooms)
+    clientIO.on("waitForSpecificRoom", onWaitForSpecificRoom)
+    clientIO.on("playerLeft", playerLeft)
     return () => {
       clientIO.off("startPlaying", startPlaying)
       clientIO.off("playerLeft", playerLeft)
       clientIO.off("playerEnterData", setPlayerData)
       clientIO.off("play", onPlay)
+      clientIO.off("updateSpecificRooms", setSpceficRooms)
     }
   }, [])
 
 
-  const onSendName = (name) => {
-    clientIO.emit("playerEnterRandom", {name})
-  }
+
   const playerPlay = (index) => {
     if(isAllowedToPlay)
       clientIO.emit("playerPlay", {color: playerColor, index})
@@ -75,8 +86,8 @@ function App() {
   return (
     <div className={styles.appContainer}>
         {
-          playerColor === statusEnum.EMPTY ? <SignIn onSendName={onSendName} /> :
-          !canStartGame ? <img className={styles.loader} src={loader} alt=""/> :
+          playerColor === statusEnum.EMPTY ? <SignIn roomsList={roomsList} /> :
+          !canStartGame ? <Loader title={loaderTitle} /> :
           <div className={styles.gameContainer}>
             <img className={styles.arrow} turn={currentPlayer} src={arrow} alt="" />
             <div className={classNames(styles.player, styles.first)}>
@@ -93,6 +104,15 @@ function App() {
             }
           </div>
         }
+    </div>
+  )
+}
+
+const Loader = ({title}) => {
+  return (
+    <div className={styles.loaderContainer}>
+      <div className={styles.title}>{title}</div>
+      <img className={styles.loader} src={loader} alt=""/>
     </div>
   )
 }

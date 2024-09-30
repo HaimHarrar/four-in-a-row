@@ -14,9 +14,10 @@ const statusEnum = {
     YELLOW: 1,
     RED: 2
 }
-const mapPlayersToRoom = new Map();
-const mapRoomData = new Map();
-let roomWaiting = ""
+const playersToRoom = new Map();
+const roomsData = new Map();
+const specificRooms = new Set();
+let roomWaitingId = 0
 
 const findFreeSquare = (column, board) => {
     for(let i = 41 - (6 - column); i >= 0 ; i -= 7){
@@ -38,58 +39,76 @@ const isThereAWinner = (board) => {
     return false;
 }
 
-io.on('connection', client => {   
+const openRoom = (client, room, name) => {
+    client.join(room);
+    playersToRoom.set(client.id, room);
+    client.emit("playerEnterData", {color: statusEnum.YELLOW})
+    roomsData.set(room, { yellowName: name, clientsIds: [client.id] });
+}
+
+const joinRoom = (client, room, name) => {
+    client.join(room);
+    playersToRoom.set(client.id, room);
+    client.emit("playerEnterData", {color: statusEnum.RED})
+    const clientsIds = roomsData.get(room).clientsIds;
+    clientsIds.push(client.id);
+    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), clientsIds, redName: name, ...roomsData.get(room)});
+    io.to(room).emit("startPlaying", roomsData.get(room));
+}
+
+io.on('connection', client => {
+    client.emit("updateSpecificRooms", Array.from(specificRooms));
+    
     client.on("playerEnterRandom", ({name}) => {
         console.log("playerEnter");
-        if(!roomWaiting){
-            roomWaiting = uid.rnd();
-            client.join(roomWaiting);
-            mapPlayersToRoom.set(client.id, roomWaiting);
-            client.emit("playerEnterData", {color: statusEnum.YELLOW})
-            mapRoomData.set(roomWaiting, { yellowName: name });
+        if(!roomWaitingId){
+            roomWaitingId = uid.rnd();
+            openRoom(client, roomWaitingId, name);
         } else {
-            client.join(roomWaiting);
-            mapPlayersToRoom.set(client.id, roomWaiting);
-            mapRoomData.set(roomWaiting, {board: Array(42).fill(statusEnum.EMPTY), redName: name, ...mapRoomData.get(roomWaiting)});
-            client.emit("playerEnterData", {color: statusEnum.RED})
-            io.to(roomWaiting).emit("startPlaying", mapRoomData.get(roomWaiting));
-            roomWaiting = "";
+            joinRoom(client, roomWaitingId, name);
+            roomWaitingId = 0;
         }
-
-        client.on("playerPlay", ({color, index}) => {
-            const board = mapRoomData.get(mapPlayersToRoom.get(client.id)).board;
-            const finalIndex = findFreeSquare(index % 7, board);
-            board[finalIndex] = color;
-            mapRoomData.set(mapPlayersToRoom.get(client.id), {board, ...mapRoomData.get(mapPlayersToRoom.get(client.id))});
-            io.to(mapPlayersToRoom.get(client.id)).emit("play", {board, next: !!finalIndex})
-            if(isThereAWinner(board)){
-                io.to(mapPlayersToRoom.get(client.id)).emit("winner", { color })
-            }
-        })
     })
-   
-    // client.on('play', ({color, index}) => {
-    //     const findFreeSquare = (column) => {
-    //         for(let i = 41 - (6 - column); i >= 0 ; i -= 7){
-    //           if(!(roomMap.get(roomIndex)[i])) return Number(i).toString(); //solve for index - 0
-    //         }
-    //         return false
-    //     }
 
-    //     const finalIndex = findFreeSquare(index % 7);
-    //     if(finalIndex) {
-    //         roomMap.get(roomIndex)[finalIndex] = color
-    //     }
-    //     io.to(roomIndex).emit("play", {board: roomMap.get(roomIndex), next: !!finalIndex})
-    //     return false; 
-    // });
+    client.on("playerEnterSpecific", ({room, name}) => {
+        if(!room){
+            const newRoomId = uid.rnd();
+            specificRooms.add(newRoomId);
+            openRoom(client, newRoomId, name);
+            client.emit("waitForSpecificRoom", {room: newRoomId});
+            io.emit("updateSpecificRooms", Array.from(specificRooms));
+        } else {
+            joinRoom(client, room, name);
+            specificRooms.delete(room);
+            io.emit("updateSpecificRooms", Array.from(specificRooms));
+        }
+    })
+  
+    client.on("playerPlay", ({color, index}) => {
+        const board = roomsData.get(playersToRoom.get(client.id)).board;
+        const finalIndex = findFreeSquare(index % 7, board);
+        board[finalIndex] = color;
+        roomsData.set(playersToRoom.get(client.id), {board, ...roomsData.get(playersToRoom.get(client.id))});
+        io.to(playersToRoom.get(client.id)).emit("play", {board, next: !!finalIndex})
+        if(isThereAWinner(board)){
+            io.to(playersToRoom.get(client.id)).emit("winner", { color })
+        }
+    })
 
-    // client.on('disconnect', (client) => {
-    //     // need to delete all the room
-    //     io.to(roomIndex).emit("playerLeft");
-    //     playersSet.delete(client.id);
-    // });
+    client.on('disconnect', () => {
+        if(playersToRoom.get(client.id)){       
+            io.to(playersToRoom.get(client.id)).emit("playerLeft");
+            const clientsIds = roomsData.get(playersToRoom.get(client.id)).clientsIds;
+            const roomId = playersToRoom.get(client.id);
+            clientsIds.forEach(id => {
+                playersToRoom.delete(id);
+            });
+            specificRooms.delete(roomId);
+            roomsData.delete(roomId);
+        }
+    });
 });
+
 server.listen(port, () => {
     console.log(`server is running at port: ${port}`)
 });
