@@ -19,8 +19,9 @@ function App() {
   const [playersName, setPlayersName] = useState({ [statusEnum.RED]: "", [statusEnum.YELLOW]: "" });
   const [playerColor, setPlayerColor] = useState(statusEnum.EMPTY);
   const [turnsCount, setTurnsCount] = useState(0);
+  const [firstPlayer, setFirstPlayer] = useState();
   const [winnerColor, setWinnerColor] = useState(statusEnum.EMPTY);
-  const currentPlayer = useMemo(() => turnsCount % 2 ? statusEnum.YELLOW : statusEnum.RED, [turnsCount])
+  const currentPlayer = useMemo(() => turnsCount % 2 ? (firstPlayer % 2) + 1 : firstPlayer, [turnsCount, firstPlayer])
   const isAllowedToPlay = useMemo(() => currentPlayer === playerColor, [playerColor, currentPlayer])
   const [canStartGame, setCanPlay] = useState(false)
   const [roomsList, setRoomsList] = useState(new Set());
@@ -33,10 +34,11 @@ function App() {
   useEffect(() => {
     clientIO.connect();
 
-    const startPlaying = ({ board, names }) => {
+    const startPlaying = ({ board, names, firstPlayer }) => {
       setPlayersName(() => ({ [statusEnum.RED]: names[statusEnum.RED], [statusEnum.YELLOW]: names[statusEnum.YELLOW] }))
       setCanPlay(true)
       setBoard(board)
+      setFirstPlayer(firstPlayer)
     }
 
     const playerLeft = () => {
@@ -67,12 +69,13 @@ function App() {
     const onWaitForSpecificRoom = ({ room }) => {
       setLoaderTitle(`Waiting for player in ${room}...`)
     }
-    const onRematch = ({ board, victoryCount }) => {
+    const onRematch = ({ board, victoryCount, firstPlayer }) => {
       setTurnsCount(0);
       setWinnerColor(statusEnum.EMPTY);
       setBoard(board);
       setVictoryCount(victoryCount)
       setIsWaitingForRematch(false)
+      setFirstPlayer(firstPlayer);
     }
 
     const onWaitForRematch = () => {

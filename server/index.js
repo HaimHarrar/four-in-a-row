@@ -54,7 +54,8 @@ const joinRoom = (client, room, name) => {
     clientsIds.push(client.id);
     const names = roomsData.get(room).names;
     names[statusEnum.RED] = name;
-    roomsData.set(room, {...roomsData.get(room), clientsIds, names, });
+    const firstPlayer = Math.floor(Math.random() * (2)) + 1;
+    roomsData.set(room, {...roomsData.get(room), firstPlayer, clientsIds, names, });
     io.to(room).emit("startPlaying", roomsData.get(room));
 }
 
@@ -96,7 +97,7 @@ io.on('connection', client => {
         if(isThereAWinner(board)){
             const victoryCount = roomsData.get(playersToRoom.get(client.id)).victoryCount;
             victoryCount[color]++;
-            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), victoryCount});
+            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), firstPlayer: color, victoryCount});
             io.to(playersToRoom.get(client.id)).emit("winner", { color })
         }
     })
