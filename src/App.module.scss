@@ -6,12 +6,57 @@
     justify-content: center;
     align-items: center;
 
+    .exitBtn {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        height: 2rem;
+        width: 2rem;
+        background-color: black;
+        border-radius: 4px;
+        z-index: 1;
+        cursor: pointer;
+        &:hover{
+            box-shadow: 0 0 5px 3px rgb(0, 0, 0);
+        }
+        .exitIcon{
+            filter: invert(85%);
+            height: 100%;
+            width: 100%;
+        }
+    }
+
     .gameContainer {
         height: 100%;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        .victoryCountBoard{
+            position: absolute;
+            top: 5px;
+            height: 2rem;
+            width: 5rem;
+            display: flex;
+            gap: 0.1rem;
+            .counter{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                &.red{
+                    background-image: radial-gradient(circle, rgb(197, 114, 114),rgb(216, 6, 6));
+                    box-shadow: inset 0 0 3px 3px rgb(158, 32, 32);
+                    flex: 1;
+                }
+                &.yellow{
+                    background-image: radial-gradient(circle, rgb(193, 197, 114),rgb(209, 216, 6));
+                    box-shadow: inset 0 0 3px 3px rgb(154, 158, 32);
+                    flex: 1;
+                }
+            }
+        }
     
         .arrow {
             position: absolute;
@@ -28,19 +73,7 @@
             }
         }
     
-        .crown {
-            position: absolute !important;
-            height: 25rem;
-            width: 25rem;
-            &[turn="1"] {
-                filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
-            }
-            &[turn="2"] {
-                filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
-            }
-            animation: 3s forwards infinite;
-            animation-name: rotate;
-        }
+        
     
         @keyframes rotate{
             100% { transform: rotate(360deg) };
@@ -61,7 +94,7 @@
                 padding: 1rem 0;
                 text-align: center;
             }
-            &.first {
+            &.red {
                 top: 5rem;
                 left: 5rem;
                 .name {
@@ -71,7 +104,7 @@
                     color: rgb(73, 18, 18);
                 }
             }
-            &.second {
+            &.yellow {
                 top: 5rem;
                 right: 5rem;
     
@@ -87,6 +120,14 @@
 }
 
 .loaderContainer {
+    .loaderBg {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        background-color: rgba(81, 102, 100, 0.466);
+    }
     height: 20rem;
     width: 20rem;
     display: flex;
@@ -108,6 +149,53 @@
             @keyframes loader {
                 100% { transform: rotate(360deg) };
             }
+        }
+    }
+}
+
+.winnerContainer{
+    height: 25rem;
+    width: 25rem;
+    position: absolute;
+   
+    .crown {
+        position: absolute;
+        position: absolute !important;
+        height: 25rem;
+        width: 25rem;
+        padding: 0;
+        &[playerColor="1"] {
+            filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
+        }
+        &[playerColor="2"] {
+            filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+        }
+        animation: 3s forwards infinite;
+        animation-name: rotate;
+
+    }
+    .rematchBtn {
+        position: absolute;
+        top: -2rem;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        height: 2rem;
+        width: 2rem;
+        background-color: red;
+        border-radius: 3px;
+        background-color: rgb(15, 15, 59);
+        cursor: pointer;
+        box-shadow: 0 0 3px 1px rgb(129, 129, 159);
+        &:hover{
+            background-color: black;
+        }
+        .rematchIcon{   
+            // filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+            filter: invert(100%);
+            height: 100%;
+            width: 100%;
         }
     }
 }

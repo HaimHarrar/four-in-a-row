@@ -43,7 +43,7 @@ const openRoom = (client, room, name) => {
     client.join(room);
     playersToRoom.set(client.id, room);
     client.emit("playerEnterData", {color: statusEnum.YELLOW})
-    roomsData.set(room, { yellowName: name, clientsIds: [client.id] });
+    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), names:{[statusEnum.RED]: "", [statusEnum.YELLOW]: name}, clientsIds: [client.id], victoryCount: {[statusEnum.RED]: 0, [statusEnum.YELLOW]: 0}});
 }
 
 const joinRoom = (client, room, name) => {
@@ -52,7 +52,9 @@ const joinRoom = (client, room, name) => {
     client.emit("playerEnterData", {color: statusEnum.RED})
     const clientsIds = roomsData.get(room).clientsIds;
     clientsIds.push(client.id);
-    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), clientsIds, redName: name, ...roomsData.get(room)});
+    const names = roomsData.get(room).names;
+    names[statusEnum.RED] = name;
+    roomsData.set(room, {...roomsData.get(room), clientsIds, names, });
     io.to(room).emit("startPlaying", roomsData.get(room));
 }
 
@@ -60,6 +62,7 @@ io.on('connection', client => {
     client.emit("updateSpecificRooms", Array.from(specificRooms));
     
     client.on("playerEnterRandom", ({name}) => {
+        if(playersToRoom.get(client.id)) return;
         console.log("playerEnter");
         if(!roomWaitingId){
             roomWaitingId = uid.rnd();
@@ -88,10 +91,23 @@ io.on('connection', client => {
         const board = roomsData.get(playersToRoom.get(client.id)).board;
         const finalIndex = findFreeSquare(index % 7, board);
         board[finalIndex] = color;
-        roomsData.set(playersToRoom.get(client.id), {board, ...roomsData.get(playersToRoom.get(client.id))});
+        roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), board});
         io.to(playersToRoom.get(client.id)).emit("play", {board, next: !!finalIndex})
         if(isThereAWinner(board)){
+            const victoryCount = roomsData.get(playersToRoom.get(client.id)).victoryCount;
+            victoryCount[color]++;
+            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), victoryCount});
             io.to(playersToRoom.get(client.id)).emit("winner", { color })
+        }
+    })
+
+    client.on("rematch", () => {
+        if(roomsData.get(playersToRoom.get(client.id)).rematch){
+            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), rematch: false});
+            io.to(playersToRoom.get(client.id)).emit("rematch", roomsData.get(playersToRoom.get(client.id)));
+        } else {
+            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), board: Array(42).fill(statusEnum.EMPTY), rematch: true});
+            client.emit("waitForRematch");
         }
     })
 

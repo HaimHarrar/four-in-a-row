@@ -1,8 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
 import styles from '../styles/Board.module.scss'
-// import Square from './Square'
-import { statusEnum } from '../App'
-import { clientIO } from '../utils/io'
 
 const Board = ({board, playerPlay}) => {
   return (
@@ -12,7 +8,7 @@ const Board = ({board, playerPlay}) => {
             <Square 
               key={index}
               index={index}
-              fillColor={color}
+              fillcolor={color}
               playerPlay={playerPlay}
             />))
         }
@@ -20,17 +16,17 @@ const Board = ({board, playerPlay}) => {
   )
 }
 
-const Square = ({ fillColor, playerPlay, index }) => {
+const Square = ({ fillcolor, playerPlay, index }) => {
   return (
     <div className={styles.squareContainer}>
-        <Circle fillColor={fillColor} index={index} playerPlay={playerPlay}/>
+        <Circle fillcolor={fillcolor} index={index} playerPlay={playerPlay}/>
     </div>
   )
 }
 
-const Circle = ({ playerPlay, index, fillColor }) => {
+const Circle = ({ playerPlay, index, fillcolor }) => {
   return (
-    <div onClick={() => {playerPlay(index);}} className={styles.circleContainer} fillColor={fillColor}></div>
+    <div onClick={() => {playerPlay(index);}} className={styles.circleContainer} fillcolor={fillcolor}></div>
   )
 }
 
