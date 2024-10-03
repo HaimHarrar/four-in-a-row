@@ -4,9 +4,22 @@ import styles from '../styles/SignIn.module.scss'
 import InputSelector from './InputSelector'
 import classNames from 'classnames'
 
-const SignIn = ({ roomsList }) => {
+const SignIn = () => {
   const [name, setName] = useState("")
   const [room, setRoom] = useState("")
+  const [roomsList, setRoomsList] = useState(new Set());
+
+  useEffect(() => {
+    const setSpceficRooms = (rooms) => {
+      console.log(rooms)
+      setRoomsList(rooms);
+    }
+
+    clientIO.on("updateRoomsList", setSpceficRooms)
+    return () => {
+      clientIO.off("updateRoomsList", setSpceficRooms)
+    }
+  }, [])
 
   const joinSpecificRoom = () => {
     if(new Set(roomsList).has(room)){

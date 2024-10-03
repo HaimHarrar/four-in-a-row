@@ -60,7 +60,7 @@ const joinRoom = (client, room, name) => {
 }
 
 io.on('connection', client => {
-    client.emit("updateSpecificRooms", Array.from(specificRooms));
+    client.emit("updateRoomsList", Array.from(specificRooms));
     
     client.on("playerEnterRandom", ({name}) => {
         if(playersToRoom.get(client.id)) return;
@@ -80,11 +80,11 @@ io.on('connection', client => {
             specificRooms.add(newRoomId);
             openRoom(client, newRoomId, name);
             client.emit("waitForSpecificRoom", {room: newRoomId});
-            io.emit("updateSpecificRooms", Array.from(specificRooms));
+            io.emit("updateRoomsList", Array.from(specificRooms));
         } else {
             joinRoom(client, room, name);
             specificRooms.delete(room);
-            io.emit("updateSpecificRooms", Array.from(specificRooms));
+            io.emit("updateRoomsList", Array.from(specificRooms));
         }
     })
   
@@ -121,6 +121,7 @@ io.on('connection', client => {
                 playersToRoom.delete(id);
             });
             specificRooms.delete(roomId);
+            io.emit("updateRoomsList", Array.from(specificRooms));
             roomsData.delete(roomId);
         }
     });

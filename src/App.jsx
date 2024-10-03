@@ -24,7 +24,6 @@ function App() {
   const currentPlayer = useMemo(() => turnsCount % 2 ? (firstPlayer % 2) + 1 : firstPlayer, [turnsCount, firstPlayer])
   const isAllowedToPlay = useMemo(() => currentPlayer === playerColor, [playerColor, currentPlayer])
   const [canStartGame, setCanPlay] = useState(false)
-  const [roomsList, setRoomsList] = useState(new Set());
   const [board, setBoard] = useState(Array(42).fill(statusEnum.EMPTY));
   const [loaderTitle, setLoaderTitle] = useState("Waiting for player...")
   const [victoryCount, setVictoryCount] = useState({ [statusEnum.RED]: 0, [statusEnum.YELLOW]: 0 })
@@ -61,11 +60,6 @@ function App() {
       setPlayerColor(color)
     }
 
-    const setSpceficRooms = (rooms) => {
-      console.log(rooms)
-      setRoomsList(rooms);
-    }
-
     const onWaitForSpecificRoom = ({ room }) => {
       setLoaderTitle(`Waiting for player in ${room}...`)
     }
@@ -86,7 +80,6 @@ function App() {
     clientIO.on("startPlaying", startPlaying)
     clientIO.on("playerEnterData", setPlayerData)
     clientIO.on("winner", onWinner)
-    clientIO.on("updateSpecificRooms", setSpceficRooms)
     clientIO.on("waitForSpecificRoom", onWaitForSpecificRoom)
     clientIO.on("playerLeft", playerLeft)
     clientIO.on("rematch", onRematch)
@@ -97,7 +90,6 @@ function App() {
       clientIO.off("startPlaying", startPlaying)
       clientIO.off("playerEnterData", setPlayerData)
       clientIO.off("winner", onWinner)
-      clientIO.off("updateSpecificRooms", setSpceficRooms)
       clientIO.on("waitForSpecificRoom", onWaitForSpecificRoom)
       clientIO.off("playerLeft", playerLeft)
       clientIO.off("rematch", onRematch)
@@ -121,7 +113,7 @@ function App() {
   return (
     <div className={styles.appContainer}>
       {
-        playerColor === statusEnum.EMPTY ? <SignIn roomsList={roomsList} /> :
+        playerColor === statusEnum.EMPTY ? <SignIn/> :
           <>
             <div className={styles.exitBtn} onClick={onOut}>
               <img className={styles.exitIcon} src={exit} alt="" />
