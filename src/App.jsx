@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './App.module.scss'
 import Board from './components/Board'
 import arrow from './assets/icons/arrow.svg'

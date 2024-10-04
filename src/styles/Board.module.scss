@@ -3,6 +3,19 @@
     height: 38.5rem;
     display: grid;
     grid-template-columns: repeat(7, auto);
+    $border-radius: 10px;
+    >:nth-child(1) {
+        border-top-left-radius: $border-radius;
+    }
+    >:nth-child(7) {
+        border-top-right-radius: $border-radius;
+    }
+    >:nth-child(36) {
+        border-bottom-left-radius: $border-radius;
+    }
+    >:nth-child(42) {
+        border-bottom-right-radius: $border-radius;
+    }
 }
 
 .squareContainer {
