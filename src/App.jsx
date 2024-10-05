@@ -9,24 +9,25 @@ import SignIn from './components/SignIn';
 import loader from './assets/icons/loader.svg'
 import restart from './assets/icons/restart.svg'
 import exit from './assets/icons/exit.svg'
+import "./App.scss"
 export const statusEnum = {
   EMPTY: 0,
-  YELLOW: 1,
-  RED: 2
+  FIRST: 1,
+  SECOND: 2
 }
 
 function App() {
-  const [playersName, setPlayersName] = useState({ [statusEnum.RED]: "", [statusEnum.YELLOW]: "" });
-  const [playerColor, setPlayerColor] = useState(statusEnum.EMPTY);
+  const [playersName, setPlayersName] = useState({ [statusEnum.SECOND]: "", [statusEnum.FIRST]: "" });
+  const [playerIndex, setPlayerIndex] = useState(statusEnum.EMPTY);
   const [turnsCount, setTurnsCount] = useState(0);
   const [firstPlayer, setFirstPlayer] = useState();
-  const [winnerColor, setWinnerColor] = useState(statusEnum.EMPTY);
+  const [winnerIndex, setWinnerIndex] = useState(statusEnum.EMPTY);
   const currentPlayer = useMemo(() => turnsCount % 2 ? (firstPlayer % 2) + 1 : firstPlayer, [turnsCount, firstPlayer])
-  const isAllowedToPlay = useMemo(() => currentPlayer === playerColor, [playerColor, currentPlayer])
+  const isAllowedToPlay = useMemo(() => currentPlayer === playerIndex, [playerIndex, currentPlayer])
   const [canStartGame, setCanPlay] = useState(false)
   const [board, setBoard] = useState(Array(42).fill(statusEnum.EMPTY));
   const [loaderTitle, setLoaderTitle] = useState("Waiting for player...")
-  const [victoryCount, setVictoryCount] = useState({ [statusEnum.RED]: 0, [statusEnum.YELLOW]: 0 })
+  const [victoryCount, setVictoryCount] = useState({ [statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0 })
   const [isWaitingForRematch, setIsWaitingForRematch] = useState(false)
 
 
@@ -34,7 +35,7 @@ function App() {
     clientIO.connect();
 
     const startPlaying = ({ board, names, firstPlayer }) => {
-      setPlayersName(() => ({ [statusEnum.RED]: names[statusEnum.RED], [statusEnum.YELLOW]: names[statusEnum.YELLOW] }))
+      setPlayersName(() => ({ [statusEnum.SECOND]: names[statusEnum.SECOND], [statusEnum.FIRST]: names[statusEnum.FIRST] }))
       setCanPlay(true)
       setBoard(board)
       setFirstPlayer(firstPlayer)
@@ -52,12 +53,12 @@ function App() {
       }
     }
 
-    const onWinner = ({ color }) => {
-      setWinnerColor(color)
+    const onWinner = ({ playerIndex }) => {
+      setWinnerIndex(playerIndex)
     }
 
-    const setPlayerData = ({ color }) => {
-      setPlayerColor(color)
+    const setPlayerData = ({ playerIndex }) => {
+      setPlayerIndex(playerIndex)
     }
 
     const onWaitForSpecificRoom = ({ room }) => {
@@ -65,7 +66,7 @@ function App() {
     }
     const onRematch = ({ board, victoryCount, firstPlayer }) => {
       setTurnsCount(0);
-      setWinnerColor(statusEnum.EMPTY);
+      setWinnerIndex(statusEnum.EMPTY);
       setBoard(board);
       setVictoryCount(victoryCount)
       setIsWaitingForRematch(false)
@@ -99,7 +100,7 @@ function App() {
 
   const playerPlay = (index) => {
     if (isAllowedToPlay)
-      clientIO.emit("playerPlay", { color: playerColor, index })
+      clientIO.emit("playerPlay", { playerIndex, index })
   }
 
   const onOut = () => {
@@ -111,41 +112,42 @@ function App() {
   }
 
   return (
-    <div className={styles.appContainer}>
+    <div theme="regular" className={classNames(styles.appContainer, "app-container")}>
       {
-        playerColor === statusEnum.EMPTY ? <SignIn/> :
+        playerIndex === statusEnum.EMPTY ? <SignIn/> :
           <>
-            <div className={styles.exitBtn} onClick={onOut}>
+            <div className={classNames(styles.exitBtn)} onClick={onOut}>
               <img className={styles.exitIcon} src={exit} alt="" />
             </div>
             {
               !canStartGame ? <Loader title={loaderTitle} /> :
+              // false ? <Loader title={loaderTitle} /> :
                 <div className={styles.gameContainer}>
                   <div className={styles.victoryCountBoard}>
-                    <div className={classNames(styles.counter, styles.red)}>
-                      {victoryCount[statusEnum.RED]}
+                    <div className={classNames(styles.counter, styles.second)}>
+                      {victoryCount[statusEnum.SECOND]}
                     </div>
-                    <div className={classNames(styles.counter, styles.yellow)}>
-                      {victoryCount[statusEnum.YELLOW]}
+                    <div className={classNames(styles.counter, styles.first)}>
+                      {victoryCount[statusEnum.FIRST]}
                     </div>
                   </div>
-                  <img className={styles.arrow} turn={currentPlayer} src={arrow} alt="" />
-                  <div className={classNames(styles.player, styles.red)}>
-                    <div className={styles.name}>{playersName[statusEnum.RED]}</div>
-                    {playerColor === statusEnum.RED && <div className={styles.turn}>{isAllowedToPlay ? "your" : "his"} turn</div>}
+                  <img className={classNames(styles.arrow)} turn={currentPlayer} src={arrow} alt="" />
+                  <div className={classNames(styles.player, styles.second)}>
+                    <div className={styles.name}>{playersName[statusEnum.SECOND]}</div>
+                    {playerIndex === statusEnum.SECOND && <div className={styles.turn}>{isAllowedToPlay ? "your" : "his"} turn</div>}
                   </div>
-                  <div className={classNames(styles.player, styles.yellow)}>
-                    <div className={styles.name}>{playersName[statusEnum.YELLOW]}</div>
-                    {playerColor === statusEnum.YELLOW && <div className={styles.turn}>{isAllowedToPlay ? "your" : "his"} turn</div>}
+                  <div className={classNames(styles.player, styles.first)}>
+                    <div className={styles.name}>{playersName[statusEnum.FIRST]}</div>
+                    {playerIndex === statusEnum.FIRST && <div className={styles.turn}>{isAllowedToPlay ? "your" : "his"} turn</div>}
                   </div>
                   <Board board={board} playerPlay={playerPlay} isAllowedToPlay={isAllowedToPlay} />
                   {
-                    !!winnerColor && 
+                    !!winnerIndex && 
                     <div className={styles.winnerContainer}>
                       {
                         isWaitingForRematch ? <Loader title="Waiting for opponent..." /> :
                           <>
-                            <img className={styles.crown} playerColor={winnerColor} src={crown} alt="" />
+                            <img className={styles.crown} playerindex={winnerIndex} src={crown} alt="" />
                             <div onClick={onRematch} className={styles.rematchBtn}>
                               <img className={styles.rematchIcon} src={restart} alt="" />
                             </div>

@@ -1,0 +1,138 @@
+.app-container{
+
+    &[theme="regular"] {
+
+        // global
+        --inputs-bgc: #3ba0ba;
+        --inputs-color: #152a2f;
+        --inputs-placeholder-color: rgb(8, 10, 39);
+        
+        // SignIn.jsx
+        --sign-in-btns-color: #1b1a25;
+        --sign-in-btns-bgc: #154dc5;
+        --sign-in-btns-bgc-hover: #06b8f3;
+        --sign-in-btns-border-color: #523e8a;
+
+        // App.jsx
+        --page-bgc: #41367e;
+        --exit-btn-bgc: rgb(4, 44, 56);
+
+        --victory-count-board-counter-first-bgi-in: white;
+        --victory-count-board-counter-first-bgi-out: #6b8000;
+        --victory-count-board-counter-first-box-shadow: #2c450f;
+        --victory-count-first-color: black;
+        --turn-arrow-first-filter: brightness(0) saturate(100%) invert(39%) sepia(47%) saturate(1525%) hue-rotate(33deg) brightness(104%) contrast(91%);
+
+        --victory-count-board-counter-second-bgi-in: white;
+        --victory-count-board-counter-second-bgi-out: rgb(128, 0, 17);
+        --victory-count-board-counter-second-box-shadow: rgb(52, 16, 21);
+        --victory-count-second-color: black;
+        --turn-arrow-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        --player-name-first-bgc: #83830b;
+        --player-name-first-box-shadow-color: #44440d;
+        --player-name-first-color: rgb(42, 48, 6);
+        --crown-first-filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
+
+        --player-name-second-bgc: #c24646;
+        --player-name-second-box-shadow-color: #630202;
+        --player-name-second-color: rgb(73, 18, 18);
+        --crown-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        // Loader
+        --loader-bgc: #51666477;
+        --loader-title-color: black;
+        --loader-filter: invert(0);
+
+        --rematch-btn-bgc: #0f0f3b;
+        --rematch-btn-box-shadow-color: #81819f;
+        --rematch-btn-bgc-hover: black;
+        --rematch-icon-filter: invert(100%);
+
+
+        // Board.jsx
+        --square-bgc: #080a23;
+        --square-border-bgc: rgb(79, 86, 106);
+
+        --circle-empty-bgi-in: white;
+        --circle-empty-bgi-out: #a49dce;
+        --circle-empty-box-shadow-color: #6ac1bb;
+
+        --circle-first-bgi-in: white;
+        --circle-first-bgi-out: #cad22c;
+        --circle-first-box-shadow-color: #5b5b45;
+
+        --circle-second-bgi-in: white;
+        --circle-second-bgi-out: #d80606;
+        --circle-second-box-shadow-color: #381313;
+
+    }
+    &[theme="monochrome"] {
+
+        // global
+        --inputs-bgc: #3ba0ba;
+        --inputs-color: #152a2f;
+        --inputs-placeholder-color: rgb(8, 10, 39);
+        
+        // SignIn.jsx
+        --sign-in-btns-color: #1b1a25;
+        --sign-in-btns-bgc: #154dc5;
+        --sign-in-btns-bgc-hover: #06b8f3;
+        --sign-in-btns-border-color: #523e8a;
+
+        // App.jsx
+        --page-bgc: #777777;
+        --exit-btn-bgc: #222;
+
+        --victory-count-board-counter-first-bgi-in: white;
+        --victory-count-board-counter-first-bgi-out: #000;
+        --victory-count-board-counter-first-box-shadow: #777;
+        --victory-count-first-color: black;
+        --turn-arrow-first-filter: invert(100%);
+
+        --victory-count-board-counter-second-bgi-in: black;
+        --victory-count-board-counter-second-bgi-out: white;
+        --victory-count-board-counter-second-box-shadow: #777;
+        --victory-count-second-color: white;
+        --turn-arrow-second-filter: invert(0);
+
+        --player-name-first-bgc: white;
+        --player-name-first-box-shadow-color: black;
+        --player-name-first-color: black;
+        --crown-first-filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
+
+        --player-name-second-bgc: #000;
+        --player-name-second-box-shadow-color: #fff;
+        --player-name-second-color: #fff;
+        --crown-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        // Loader
+        --loader-bgc: #51666477;
+        --loader-title-color: black;
+        --loader-filter: invert(0);
+
+        --rematch-btn-bgc: #0f0f3b;
+        --rematch-btn-box-shadow-color: #81819f;
+        --rematch-btn-bgc-hover: black;
+        --rematch-icon-filter: invert(100%);
+
+
+        // Board.jsx
+        --square-bgc: #000;
+        --square-border-bgc: #777;
+
+        --circle-empty-bgi-in: white;
+        --circle-empty-bgi-out: #777;
+        --circle-empty-box-shadow-color: #333;
+
+        --circle-first-bgi-in: white;
+        --circle-first-bgi-out: black;
+        --circle-first-box-shadow-color: #777;
+
+        --circle-second-bgi-in: black;
+        --circle-second-bgi-out: white;
+        --circle-second-box-shadow-color: #777;
+
+    }
+   
+}

@@ -8,8 +8,6 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        // background-color: red;
-        // height: 10rem;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
@@ -21,6 +19,12 @@
             border: none;
             outline: none;
             padding-left: 5px;
+            background-color: var(--inputs-bgc);
+            color: var(--inputs-color);
+            
+            &::placeholder {
+                color: var(--inputs-placeholder-color);
+            }
         }
 
         .inputSelectorContainer{
@@ -33,14 +37,15 @@
             pointer-events: none;
         }
         .btn {
-            background-color: aqua;
-            border: 1px solid black;
+            color: var(--sign-in-btns-color);
+            background-color: var(--sign-in-btns-bgc);
+            border: 1px solid var(--sign-in-btns-border-color);
             padding: 1rem;
             margin: 0.5rem 0;
             border-radius: 0.3rem;
             cursor: pointer;
             &:hover {
-                background-color: rgb(16, 120, 120);
+                background-color: var(--sign-in-btns-bgc-hover);
             }
         }
     }

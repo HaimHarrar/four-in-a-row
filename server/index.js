@@ -11,8 +11,8 @@ const io = require('socket.io')(server, {
 const port = 4000
 const statusEnum = {
     EMPTY: 0,
-    YELLOW: 1,
-    RED: 2
+    FIRST: 1,
+    SECOND: 2
 }
 const playersToRoom = new Map();
 const roomsData = new Map();
@@ -42,18 +42,18 @@ const isThereAWinner = (board) => {
 const openRoom = (client, room, name) => {
     client.join(room);
     playersToRoom.set(client.id, room);
-    client.emit("playerEnterData", {color: statusEnum.YELLOW})
-    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), names:{[statusEnum.RED]: "", [statusEnum.YELLOW]: name}, clientsIds: [client.id], victoryCount: {[statusEnum.RED]: 0, [statusEnum.YELLOW]: 0}});
+    client.emit("playerEnterData", {playerIndex: statusEnum.FIRST})
+    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), names:{[statusEnum.SECOND]: "", [statusEnum.FIRST]: name}, clientsIds: [client.id], victoryCount: {[statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0}});
 }
 
 const joinRoom = (client, room, name) => {
     client.join(room);
     playersToRoom.set(client.id, room);
-    client.emit("playerEnterData", {color: statusEnum.RED})
+    client.emit("playerEnterData", {playerIndex: statusEnum.SECOND})
     const clientsIds = roomsData.get(room).clientsIds;
     clientsIds.push(client.id);
     const names = roomsData.get(room).names;
-    names[statusEnum.RED] = name;
+    names[statusEnum.SECOND] = name;
     const firstPlayer = Math.floor(Math.random() * (2)) + 1;
     roomsData.set(room, {...roomsData.get(room), firstPlayer, clientsIds, names, });
     io.to(room).emit("startPlaying", roomsData.get(room));
@@ -88,17 +88,17 @@ io.on('connection', client => {
         }
     })
   
-    client.on("playerPlay", ({color, index}) => {
+    client.on("playerPlay", ({playerIndex, index}) => {
         const board = roomsData.get(playersToRoom.get(client.id)).board;
         const finalIndex = findFreeSquare(index % 7, board);
-        board[finalIndex] = color;
+        board[finalIndex] = playerIndex;
         roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), board});
         io.to(playersToRoom.get(client.id)).emit("play", {board, next: !!finalIndex})
         if(isThereAWinner(board)){
             const victoryCount = roomsData.get(playersToRoom.get(client.id)).victoryCount;
-            victoryCount[color]++;
-            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), firstPlayer: color, victoryCount});
-            io.to(playersToRoom.get(client.id)).emit("winner", { color })
+            victoryCount[playerIndex]++;
+            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), firstPlayer: playerIndex, victoryCount});
+            io.to(playersToRoom.get(client.id)).emit("winner", { playerIndex })
         }
     })
 
@@ -113,15 +113,22 @@ io.on('connection', client => {
     })
 
     client.on('disconnect', () => {
-        if(playersToRoom.get(client.id)){       
-            io.to(playersToRoom.get(client.id)).emit("playerLeft");
-            const clientsIds = roomsData.get(playersToRoom.get(client.id)).clientsIds;
-            const roomId = playersToRoom.get(client.id);
-            clientsIds.forEach(id => {
-                playersToRoom.delete(id);
-            });
-            specificRooms.delete(roomId);
-            io.emit("updateRoomsList", Array.from(specificRooms));
+        const roomId = playersToRoom.get(client.id);
+
+        if(roomId){     
+            if(roomId === roomWaitingId){
+                roomWaitingId = 0;
+            }else {
+                io.to(roomId).emit("playerLeft");
+                const clientsIds = roomsData.get(roomId).clientsIds;
+                clientsIds.forEach(id => {
+                    playersToRoom.delete(id);
+                });
+                if(specificRooms.has(roomId)){
+                    specificRooms.delete(roomId);
+                    io.emit("updateRoomsList", Array.from(specificRooms));
+                }
+            }
             roomsData.delete(roomId);
         }
     });
