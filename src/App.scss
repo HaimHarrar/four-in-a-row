@@ -1,6 +1,6 @@
 .app-container{
 
-    &[theme="regular"] {
+    &[theme=""] {
 
         // global
         --inputs-bgc: #3ba0ba;
@@ -44,10 +44,10 @@
         --loader-title-color: black;
         --loader-filter: invert(0);
 
-        --rematch-btn-bgc: #0f0f3b;
-        --rematch-btn-box-shadow-color: #81819f;
-        --rematch-btn-bgc-hover: black;
-        --rematch-icon-filter: invert(100%);
+        --action-btns-bgc: #0f0f3b;
+        --action-btns-bgc-hover: black;
+        --action-btns-box-shadow-color: #81819f;
+        --action-icon-filter: invert(100%);
 
 
         // Board.jsx
@@ -70,15 +70,15 @@
     &[theme="monochrome"] {
 
         // global
-        --inputs-bgc: #3ba0ba;
+        --inputs-bgc: #fff;
         --inputs-color: #152a2f;
         --inputs-placeholder-color: rgb(8, 10, 39);
         
         // SignIn.jsx
-        --sign-in-btns-color: #1b1a25;
-        --sign-in-btns-bgc: #154dc5;
-        --sign-in-btns-bgc-hover: #06b8f3;
-        --sign-in-btns-border-color: #523e8a;
+        --sign-in-btns-color: black;
+        --sign-in-btns-bgc: #fff;
+        --sign-in-btns-bgc-hover: #777;
+        --sign-in-btns-border-color: #000;
 
         // App.jsx
         --page-bgc: #777777;
@@ -107,14 +107,14 @@
         --crown-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
 
         // Loader
-        --loader-bgc: #51666477;
+        --loader-bgc: #7777777;
         --loader-title-color: black;
         --loader-filter: invert(0);
 
-        --rematch-btn-bgc: #0f0f3b;
-        --rematch-btn-box-shadow-color: #81819f;
-        --rematch-btn-bgc-hover: black;
-        --rematch-icon-filter: invert(100%);
+        --action-btns-bgc: #000;
+        --action-btns-box-shadow-color: #777;
+        --action-btns-bgc-hover: #222;
+        --action-icon-filter: invert(100%);
 
 
         // Board.jsx

@@ -10,6 +10,8 @@ import loader from './assets/icons/loader.svg'
 import restart from './assets/icons/restart.svg'
 import exit from './assets/icons/exit.svg'
 import "./App.scss"
+import InputSelector from './components/InputSelector';
+
 export const statusEnum = {
   EMPTY: 0,
   FIRST: 1,
@@ -29,7 +31,7 @@ function App() {
   const [loaderTitle, setLoaderTitle] = useState("Waiting for player...")
   const [victoryCount, setVictoryCount] = useState({ [statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0 })
   const [isWaitingForRematch, setIsWaitingForRematch] = useState(false)
-
+  const [selectedTheme, setSelectedTheme] = useState("")
 
   useEffect(() => {
     clientIO.connect();
@@ -112,7 +114,10 @@ function App() {
   }
 
   return (
-    <div theme="regular" className={classNames(styles.appContainer, "app-container")}>
+    <div theme={selectedTheme} className={classNames(styles.appContainer, "app-container")}>
+      <div className={styles.themeSelectorContainer}>
+        <InputSelector placeholder={"Theme"} selected={selectedTheme} setSelected={setSelectedTheme} title={"Theme"} options={["regular", "monochrome"]}/>
+      </div>
       {
         playerIndex === statusEnum.EMPTY ? <SignIn/> :
           <>

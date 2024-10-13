@@ -1,3 +1,21 @@
+@mixin actionBtn {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 3px;
+    background-color: var(--action-btns-bgc);
+    cursor: pointer;
+    box-shadow: 0 0 3px 1px var(--action-btns-box-shadow-color);
+    z-index: 1;
+    &:hover{
+        background-color: var(--action-btns-bgc-hover);
+    }
+    img{   
+        filter: var(--action-icon-filter);
+        height: 100%;
+        width: 100%;
+    }
+}
+
 .appContainer {
     background-color: var(--page-bgc);
     width: 100vw;
@@ -6,21 +24,22 @@
     justify-content: center;
     align-items: center;
 
+    .themeSelectorContainer{
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        width: 6rem;
+        height: 1rem;
+    }
+
     .exitBtn {
         position: fixed;
         top: 1rem;
         right: 1rem;
-        height: 2rem;
-        width: 2rem;
-        background-color: var(--exit-btn-bgc);
-        border-radius: 4px;
-        z-index: 1;
-        cursor: pointer;
-        &:hover{
-            background-color: var(--exit-btn-bgc);
-        }
+        @include actionBtn;
+
         .exitIcon{
-            filter: invert(85%);
+            filter: var(--action-icon-filter);
             height: 100%;
             width: 100%;
         }
@@ -140,6 +159,7 @@
         position: absolute;
         top: 0;
         color: var(--loader-title-color);
+        z-index: 1;
     }
     .loader {
         height: 8rem;
@@ -147,6 +167,7 @@
         animation:  3s backwards infinite;
         animation-name: loader;
         filter: var(--loader-filter);
+        z-index: 1;
         & {
             @keyframes loader {
                 100% { transform: rotate(360deg) };
@@ -176,6 +197,7 @@
         animation-name: rotate;
 
     }
+
     .rematchBtn {
         position: absolute;
         top: -2rem;
@@ -183,20 +205,6 @@
         margin-right: auto;
         left: 0;
         right: 0;
-        height: 2rem;
-        width: 2rem;
-        border-radius: 3px;
-        background-color: var(--rematch-btn-bgc);
-        cursor: pointer;
-        box-shadow: 0 0 3px 1px var(--rematch-btn-box-shadow-color);
-        &:hover{
-            background-color: var(--rematch-btn-bgc-hover);
-        }
-        .rematchIcon{   
-            // filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
-            filter: var(--rematch-icon-filter);
-            height: 100%;
-            width: 100%;
-        }
+        @include actionBtn;
     }
 }

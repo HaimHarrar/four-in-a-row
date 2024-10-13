@@ -2,25 +2,37 @@ import React, { useEffect, useState, useMemo } from 'react'
 import styles from '../styles/InputSelector.module.scss'
 import OutsideClickHandler from 'react-outside-click-handler';
 import Fuse from 'fuse.js';
-
-const InputSelector = ({ options, title, selected, setSelected }) => {
+import arrowUp from '../assets/icons/arrow-up.svg'
+import arrowDown from '../assets/icons/arrow-down.svg'
+const InputSelector = ({ options, placeholder, selected, setSelected }) => {
     const [isSelectorOpen, setIsSelectorOpen] = useState(false)
+    const [text, setText] = useState(selected || "")
     const renderOptions = useMemo(() => {
         const fuse = new Fuse(options, {
             includeScore: true,
             threshold: 0.25,
         })
-        return selected === "" ? options : fuse.search(selected).map(({ item }) => item)
-    })
+        return text === "" ? options : fuse.search(text).map(({ item }) => item)
+    }, [text, options])
+
     useEffect(() => {
         const onEscape = (e) => e.key === "Escape" && setIsSelectorOpen(false)
         document.addEventListener("keydown", onEscape)
         return () => document.removeEventListener("keydown", onEscape)
     }, [])
 
+    useEffect(() => {
+        setText(selected || text)
+    }, [selected])
+
+    useEffect(() => {
+        if(options.includes(text)) setSelected(text)
+        else setSelected("")
+    }, [text])
+
     return (
         <div className={styles.inputSelector}>
-            <input className={styles.input} value={selected} type="text" onChange={(e) => setSelected(e.target.value)} placeholder={title} onClick={() => setIsSelectorOpen(!isSelectorOpen)}/>
+            <input className={styles.input} value={text} type="text" onChange={(e) => setText(e.target.value)} placeholder={placeholder} onClick={() => setIsSelectorOpen(!isSelectorOpen)}/>
 
             {isSelectorOpen && !!(renderOptions.length) &&
                 <OutsideClickHandler

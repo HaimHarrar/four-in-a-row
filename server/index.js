@@ -1,12 +1,23 @@
-const ShortUniqueId = require('short-unique-id');
-const server = require('http').createServer();
-const uid = new ShortUniqueId({ length: 8 });
-const io = require('socket.io')(server, {
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
     }
 });
+const cors = require('cors');
+const ShortUniqueId = require('short-unique-id');
+
+app.use(cors());
+const uid = new ShortUniqueId({ length: 8 });
+
+app.get('/hello', (req, res) => {
+    res.send('hello')
+})
 
 const port = 4000
 const statusEnum = {
@@ -54,7 +65,7 @@ const joinRoom = (client, room, name) => {
     clientsIds.push(client.id);
     const names = roomsData.get(room).names;
     names[statusEnum.SECOND] = name;
-    const firstPlayer = Math.floor(Math.random() * (2)) + 1;
+    const firstPlayer = Math.floor(Math.random() * 2) + 1;
     roomsData.set(room, {...roomsData.get(room), firstPlayer, clientsIds, names, });
     io.to(room).emit("startPlaying", roomsData.get(room));
 }
@@ -97,7 +108,7 @@ io.on('connection', client => {
         if(isThereAWinner(board)){
             const victoryCount = roomsData.get(playersToRoom.get(client.id)).victoryCount;
             victoryCount[playerIndex]++;
-            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), firstPlayer: playerIndex, victoryCount});
+            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), firstPlayer: (roomsData.get(playersToRoom.get(client.id)).firstPlayer % 2) + 1, victoryCount});
             io.to(playersToRoom.get(client.id)).emit("winner", { playerIndex })
         }
     })

@@ -8,11 +8,11 @@ const SignIn = () => {
   const [name, setName] = useState("")
   const [room, setRoom] = useState("")
   const [roomsList, setRoomsList] = useState(new Set());
-
+  
   useEffect(() => {
     const setSpceficRooms = (rooms) => {
       console.log(rooms)
-      setRoomsList(rooms);
+      setRoomsList(() => new Set(rooms));
     }
 
     clientIO.on("updateRoomsList", setSpceficRooms)
@@ -39,13 +39,13 @@ const SignIn = () => {
       <div className={styles.inputContainer}>
         <input placeholder='enter your name please' className={styles.input} type="text" max={20} value={name} onChange={(e) => setName(e.target.value)} />
         <div className={styles.inputSelectorContainer}>
-          <InputSelector setSelected={setRoom} selected={room} options={Array.from(roomsList)} title='Join to room:' />
+          <InputSelector setSelected={setRoom} selected={room} options={Array.from(roomsList)} placeholder='Join to room:' />
         </div>
       </div>
-        <div  className={classNames(styles.buttons, {[styles.disabled]: !name})}>
-          <div onClick={joinSpecificRoom} className={styles.btn}>join to specific room</div>
-          <div onClick={createRoom} className={styles.btn}>open a room</div>
-          <div onClick={joinRandomRoom} className={styles.btn}>play with a random player</div>
+        <div  className={classNames(styles.buttons)}>
+          <div onClick={joinSpecificRoom} className={classNames(styles.btn, {[styles.disabled]: (!name || !roomsList.has(room))})}>join to specific room</div>
+          <div onClick={createRoom} className={classNames(styles.btn, {[styles.disabled]: !name})}>open a room</div>
+          <div onClick={joinRandomRoom} className={classNames(styles.btn, {[styles.disabled]: !name})}>play with a random player</div>
         </div>
     </div>
   )

@@ -29,14 +29,20 @@
 
         .inputSelectorContainer{
             width: 15em;
+            height: 2rem;
         }
     }
     .buttons {
+        
         &.disabled {
             opacity: 0.5;
             pointer-events: none;
         }
         .btn {
+            &.disabled {
+                opacity: 0.5;
+                pointer-events: none;
+            }
             color: var(--sign-in-btns-color);
             background-color: var(--sign-in-btns-bgc);
             border: 1px solid var(--sign-in-btns-border-color);
