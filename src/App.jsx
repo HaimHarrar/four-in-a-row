@@ -30,8 +30,9 @@ function App() {
   const [board, setBoard] = useState(Array(42).fill(statusEnum.EMPTY));
   const [loaderTitle, setLoaderTitle] = useState("Waiting for player...")
   const [victoryCount, setVictoryCount] = useState({ [statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0 })
-  const [isWaitingForRematch, setIsWaitingForRematch] = useState(false)
-  const [selectedTheme, setSelectedTheme] = useState("")
+  const [isWaitingForRematch, setIsWaitingForRematch] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState("");
+  const [isWaitingForAction, setIsWaitingForAction] = useState(false);
 
   useEffect(() => {
     clientIO.connect();
@@ -51,6 +52,7 @@ function App() {
     const onPlay = ({ board, next }) => {
       if (next) {
         setBoard(board)
+        setIsWaitingForAction(false)
         setTurnsCount(prev => prev + 1);
       }
     }
@@ -101,8 +103,10 @@ function App() {
   }, [])
 
   const playerPlay = (index) => {
-    if (isAllowedToPlay)
+    if (isAllowedToPlay && !isWaitingForAction) {
+      setIsWaitingForAction(true)
       clientIO.emit("playerPlay", { playerIndex, index })
+    }
   }
 
   const onOut = () => {
@@ -148,6 +152,7 @@ function App() {
                   <Board board={board} playerPlay={playerPlay} isAllowedToPlay={isAllowedToPlay} />
                   {
                     !!winnerIndex && 
+                    // true && 
                     <div className={styles.winnerContainer}>
                       {
                         isWaitingForRematch ? <Loader title="Waiting for opponent..." /> :
