@@ -15,7 +15,9 @@ import InputSelector from './components/InputSelector';
 export const statusEnum = {
   EMPTY: 0,
   FIRST: 1,
-  SECOND: 2
+  SECOND: 2,
+  FIRST_WIN: 3,
+  SECOND_WIN: 4
 }
 
 function App() {
@@ -57,8 +59,9 @@ function App() {
       }
     }
 
-    const onWinner = ({ playerIndex }) => {
+    const onWinner = ({ playerIndex, board }) => {
       setWinnerIndex(playerIndex)
+      setBoard(board)
     }
 
     const setPlayerData = ({ playerIndex }) => {
@@ -120,7 +123,7 @@ function App() {
   return (
     <div theme={selectedTheme} className={classNames(styles.appContainer, "app-container")}>
       <div className={styles.themeSelectorContainer}>
-        <InputSelector placeholder={"Theme"} selected={selectedTheme} setSelected={setSelectedTheme} title={"Theme"} options={["regular", "monochrome"]}/>
+        <InputSelector placeholder={"Theme"} selected={selectedTheme} setSelected={setSelectedTheme} title={"Theme"} options={["monochrome"]}/>
       </div>
       {
         playerIndex === statusEnum.EMPTY ? <SignIn/> :

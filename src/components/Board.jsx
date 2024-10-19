@@ -1,5 +1,6 @@
+import { statusEnum } from '../App'
 import styles from '../styles/Board.module.scss'
-
+import cross from '../assets/icons/cross.svg'
 const Board = ({board, playerPlay}) => {
   return (
     <div className={styles.boardContainer}>
@@ -19,6 +20,7 @@ const Board = ({board, playerPlay}) => {
 const Square = ({ fillcolor, playerPlay, index }) => {
   return (
     <div className={styles.squareContainer}>
+        <div className={styles.bgCircle}></div>
         <Circle fillcolor={fillcolor} index={index} playerPlay={playerPlay}/>
     </div>
   )
