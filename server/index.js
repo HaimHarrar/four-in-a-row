@@ -36,7 +36,7 @@ const findFreeSquare = (column, board) => {
     for(let i = 41 - (6 - column); i >= 0 ; i -= 7){
       if(!(board[i])) return Number(i).toString(); //solve for index - 0
     }
-    return false
+    return ""
 }
 
 const isThereAWinner = (board, playerIndex) => {
@@ -97,6 +97,14 @@ const joinRoom = (client, room, name) => {
 
 io.on('connection', client => {
     client.emit("updateRoomsList", Array.from(specificRooms));
+    client.on("OnePC", () => {
+        const room = uid.rnd();
+        client.join(room);
+        playersToRoom.set(client.id, room);
+        const firstPlayer = Math.floor(Math.random() * 2) + 1;
+        roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), clientsIds: [client.id], victoryCount: {[statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0}, OnePC: true, firstPlayer});
+        client.emit("OnePC", roomsData.get(room));
+    })
     
     client.on("playerEnterRandom", ({name}) => {
         if(playersToRoom.get(client.id)) return;
@@ -140,11 +148,15 @@ io.on('connection', client => {
     })
 
     client.on("rematch", () => {
-        if(roomsData.get(playersToRoom.get(client.id)).rematch){
-            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), rematch: false});
-            io.to(playersToRoom.get(client.id)).emit("rematch", roomsData.get(playersToRoom.get(client.id)));
+        const roomData = roomsData.get(playersToRoom.get(client.id));
+        if(roomData.OnePC){
+            roomsData.set(playersToRoom.get(client.id), {...roomData, board: Array(42).fill(statusEnum.EMPTY)});
+            client.emit("rematch", roomsData.get(playersToRoom.get(client.id)));
+        } else if(roomData.rematch){
+            roomsData.set(playersToRoom.get(client.id), {...roomData, rematch: false});
+            io.to(playersToRoom.get(client.id)).emit("rematch", roomData);
         } else {
-            roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), board: Array(42).fill(statusEnum.EMPTY), rematch: true});
+            roomsData.set(playersToRoom.get(client.id), {...roomData, board: Array(42).fill(statusEnum.EMPTY), rematch: true});
             client.emit("waitForRematch");
         }
     })

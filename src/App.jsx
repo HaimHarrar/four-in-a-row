@@ -24,18 +24,19 @@ function App() {
   const [playersName, setPlayersName] = useState({ [statusEnum.SECOND]: "", [statusEnum.FIRST]: "" });
   const [playerIndex, setPlayerIndex] = useState(statusEnum.EMPTY);
   const [turnsCount, setTurnsCount] = useState(0);
+  const [isOnePC, setIsOnePC] = useState(false);
   const [firstPlayer, setFirstPlayer] = useState();
   const [winnerIndex, setWinnerIndex] = useState(statusEnum.EMPTY);
   const currentPlayer = useMemo(() => turnsCount % 2 ? (firstPlayer % 2) + 1 : firstPlayer, [turnsCount, firstPlayer])
-  const isAllowedToPlay = useMemo(() => currentPlayer === playerIndex, [playerIndex, currentPlayer])
+  const isAllowedToPlay = useMemo(() => isOnePC || currentPlayer === playerIndex, [playerIndex, currentPlayer])
   const [canStartGame, setCanPlay] = useState(false)
   const [board, setBoard] = useState(Array(42).fill(statusEnum.EMPTY));
   const [loaderTitle, setLoaderTitle] = useState("Waiting for player...")
   const [victoryCount, setVictoryCount] = useState({ [statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0 })
   const [isWaitingForRematch, setIsWaitingForRematch] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState("wooden");
   const [isWaitingForAction, setIsWaitingForAction] = useState(false);
-
+  
   useEffect(() => {
     clientIO.connect();
 
@@ -56,6 +57,11 @@ function App() {
         setBoard(board)
         setIsWaitingForAction(false)
         setTurnsCount(prev => prev + 1);
+        if(isOnePC) {
+          setPlayerIndex((prev) => prev === statusEnum.FIRST ? statusEnum.SECOND : statusEnum.FIRST)
+        }
+      } else {
+        setIsWaitingForAction(false)
       }
     }
 
@@ -69,8 +75,17 @@ function App() {
     }
 
     const onWaitForSpecificRoom = ({ room }) => {
-      setLoaderTitle(`Waiting for player in ${room}...`)
+      setLoaderTitle(`Waiting for player in Room: ${room}`)
     }
+
+    const onOnePC = ({board, firstPlayer}) => {
+      setCanPlay(true)
+      setBoard(board)
+      setIsOnePC(true)
+      setPlayerIndex(firstPlayer)
+      setFirstPlayer(firstPlayer)
+    }
+    
     const onRematch = ({ board, victoryCount, firstPlayer }) => {
       setTurnsCount(0);
       setWinnerIndex(statusEnum.EMPTY);
@@ -92,6 +107,7 @@ function App() {
     clientIO.on("playerLeft", playerLeft)
     clientIO.on("rematch", onRematch)
     clientIO.on("waitForRematch", onWaitForRematch)
+    clientIO.on("OnePC", onOnePC)
 
     return () => {
       clientIO.off("play", onPlay)
@@ -102,11 +118,12 @@ function App() {
       clientIO.off("playerLeft", playerLeft)
       clientIO.off("rematch", onRematch)
       clientIO.off("waitForRematch", onWaitForRematch)
+      clientIO.off("OnePC", onOnePC)
     }
-  }, [])
+  }, [isOnePC])
 
   const playerPlay = (index) => {
-    if (isAllowedToPlay && !isWaitingForAction) {
+    if (isAllowedToPlay && !isWaitingForAction && !winnerIndex) {
       setIsWaitingForAction(true)
       clientIO.emit("playerPlay", { playerIndex, index })
     }
@@ -123,7 +140,7 @@ function App() {
   return (
     <div theme={selectedTheme} className={classNames(styles.appContainer, "app-container")}>
       <div className={styles.themeSelectorContainer}>
-        <InputSelector placeholder={"Theme"} selected={selectedTheme} setSelected={setSelectedTheme} title={"Theme"} options={["monochrome"]}/>
+        <InputSelector placeholder={"Theme"} selected={selectedTheme} setSelected={setSelectedTheme} title={"Theme"} options={["monochrome", "wooden"]}/>
       </div>
       {
         playerIndex === statusEnum.EMPTY ? <SignIn/> :

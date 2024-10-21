@@ -11,7 +11,6 @@ const SignIn = () => {
   
   useEffect(() => {
     const setSpceficRooms = (rooms) => {
-      console.log(rooms)
       setRoomsList(() => new Set(rooms));
     }
 
@@ -33,6 +32,9 @@ const SignIn = () => {
   const joinRandomRoom = () => {
     clientIO.emit("playerEnterRandom", { name })
   }
+  const playOnOnPC = () => {
+    clientIO.emit("OnePC")
+  }
 
   return (
     <div className={styles.signInContainer}>
@@ -46,6 +48,7 @@ const SignIn = () => {
           <div onClick={joinSpecificRoom} className={classNames(styles.btn, {[styles.disabled]: (!name || !roomsList.has(room))})}>join to specific room</div>
           <div onClick={createRoom} className={classNames(styles.btn, {[styles.disabled]: !name})}>open a room</div>
           <div onClick={joinRandomRoom} className={classNames(styles.btn, {[styles.disabled]: !name})}>play with a random player</div>
+          <div onClick={playOnOnPC}className={styles.btn}>OnePC</div>
         </div>
     </div>
   )
