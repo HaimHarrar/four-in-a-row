@@ -21,6 +21,7 @@
             padding-left: 5px;
             background-color: var(--inputs-bgc);
             color: var(--inputs-color);
+            caret-color: var(--inputs-color);
             
             &::placeholder {
                 color: var(--inputs-placeholder-color);

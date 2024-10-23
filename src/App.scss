@@ -64,6 +64,20 @@
         --circle-second-bgi-out: #d81f06;
         --circle-second-box-shadow-color: #381313;
 
+        // chat box
+        --chat-box-title-bgc: black;
+        --chat-box-title-color: white;
+        --chat-box-title-border-color: white;
+        
+        --chat-box-bgc: azure;
+        --chat-box-border-color: black;
+
+        --chat-box-first-message-bgc: #d2a62c;
+        --chat-box-first-message-color: white;
+        --chat-box-second-message-bgc: #d81f06; 
+        --chat-box-second-message-color: white;
+
+
     }
     &[theme=""] {
 
@@ -128,6 +142,19 @@
         --circle-second-bgi-in: white;
         --circle-second-bgi-out: #d80606;
         --circle-second-box-shadow-color: #381313;
+
+        // chat box
+        --chat-box-title-bgc: black;
+        --chat-box-title-color: white;
+        --chat-box-title-border-color: white;
+        
+        --chat-box-bgc: azure;
+        --chat-box-border-color: black;
+
+        --chat-box-first-message-bgc: #d2a62c;
+        --chat-box-first-message-color: white;
+        --chat-box-second-message-bgc: #d81f06; 
+        --chat-box-second-message-color: white;
 
     }
     &[theme="monochrome"] {
@@ -194,6 +221,19 @@
         --circle-second-bgi-out: white;
         --circle-second-box-shadow-color: #777;
 
+
+        // chat box
+        --chat-box-title-bgc: black;
+        --chat-box-title-color: white;
+        --chat-box-title-border-color: white;
+        
+        --chat-box-bgc: #aaa;
+        --chat-box-border-color: black;
+
+        --chat-box-first-message-bgc: white;
+        --chat-box-first-message-color: black;
+        --chat-box-second-message-bgc: black; 
+        --chat-box-second-message-color: white;
     }
    
 }

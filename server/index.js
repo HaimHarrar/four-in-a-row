@@ -79,7 +79,7 @@ const openRoom = (client, room, name) => {
     client.join(room);
     playersToRoom.set(client.id, room);
     client.emit("playerEnterData", {playerIndex: statusEnum.FIRST})
-    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), names:{[statusEnum.SECOND]: "", [statusEnum.FIRST]: name}, clientsIds: [client.id], victoryCount: {[statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0}});
+    roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), names:{[statusEnum.SECOND]: "", [statusEnum.FIRST]: name}, clientsIds: [client.id], victoryCount: {[statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0}, messages: []});
 }
 
 const joinRoom = (client, room, name) => {
@@ -159,6 +159,14 @@ io.on('connection', client => {
             roomsData.set(playersToRoom.get(client.id), {...roomData, board: Array(42).fill(statusEnum.EMPTY), rematch: true});
             client.emit("waitForRematch");
         }
+    })
+
+    client.on("message", ({message, player}) => {
+        const room = playersToRoom.get(client.id);
+        const messages = roomsData.get(room).messages;
+        messages.push({player, message});
+        roomsData.set(room, {...roomsData.get(room), messages});
+        io.to(room).emit("message", { messages: roomsData.get(room).messages})
     })
 
     client.on('disconnect', () => {
