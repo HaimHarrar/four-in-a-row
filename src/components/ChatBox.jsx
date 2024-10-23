@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from '../styles/ChatBox.module.scss'
 import { clientIO } from '../utils/io'
 import send from '../assets/icons/send.svg'
@@ -8,10 +8,13 @@ const ChatBox = ({player}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState([])
   const [messageToSend, setMessageToSend] = useState("")
-
+  const messagesRef = useRef(null);
   useEffect(() => {
     const onMessage = ({messages}) => {
       setMessages(messages)
+      requestAnimationFrame(() => {
+        messagesRef.current.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' });
+      })
     }
     clientIO.on("message", onMessage)
     return () => {
@@ -19,7 +22,13 @@ const ChatBox = ({player}) => {
     }
   }, [])
 
+  useEffect(() => {
+    if(isOpen) {
+      messagesRef.current.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' });
+    }
+  }, [isOpen])
   const sendMessage = () => {
+    if(!messageToSend) return
     clientIO.emit("message", {message: messageToSend, player})
     setMessageToSend("")
   }
@@ -35,7 +44,7 @@ const ChatBox = ({player}) => {
       {
         isOpen && 
         <>
-          <div className={styles.messagesContainer} is-open={isOpen.toString()}>
+          <div className={styles.messagesContainer} ref={messagesRef} is-open={isOpen.toString()}>
             {messages.map((message, index) => <div className={styles.message} player={message.player} key={index}>{message.message}</div>)}
           </div>
             <div className={styles.inputContainer}>
