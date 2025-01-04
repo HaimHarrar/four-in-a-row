@@ -12,6 +12,7 @@ import exit from './assets/icons/exit.svg'
 import "./App.scss"
 import InputSelector from './components/InputSelector';
 import ChatBox from './components/ChatBox';
+import PreperedMessages from './components/PreperedMessages';
 
 export const statusEnum = {
   EMPTY: 0,
@@ -171,9 +172,13 @@ function App() {
                     {playerIndex === statusEnum.FIRST && <div className={styles.turn}>{isAllowedToPlay ? "your" : "his"} turn</div>}
                   </div>
                   <Board board={board} playerPlay={playerPlay} isAllowedToPlay={isAllowedToPlay} />
-                  {
+                  { 
                     !isOnePC &&
-                    <ChatBox player={playerIndex}/>
+                    <>
+                      <ChatBox player={playerIndex}/>
+                      <PreperedMessages player={playerIndex}/>
+                    </>
+                    
                   }
                   {
                     !!winnerIndex && 

@@ -14,22 +14,33 @@ const SignIn = () => {
       setRoomsList(() => new Set(rooms));
     }
 
+    setName(() => localStorage.getItem("name"))
+
     clientIO.on("updateRoomsList", setSpceficRooms)
     return () => {
       clientIO.off("updateRoomsList", setSpceficRooms)
     }
   }, [])
 
+  const setLocalStorageName = () => {
+    if(name !== localStorage.getItem("name")){
+      localStorage.setItem("name", name)
+    }
+  }
+
   const joinSpecificRoom = () => {
+    setLocalStorageName()
     if(new Set(roomsList).has(room)){
       clientIO.emit("playerEnterSpecific", { name, room })
     }
   }
   const createRoom = () => {
+    setLocalStorageName()
     clientIO.emit("playerEnterSpecific", { name })
   }
 
   const joinRandomRoom = () => {
+    setLocalStorageName()
     clientIO.emit("playerEnterRandom", { name })
   }
   const playOnOnPC = () => {
@@ -44,7 +55,7 @@ const SignIn = () => {
           <InputSelector setSelected={setRoom} selected={room} options={Array.from(roomsList)} placeholder='Join to room:' />
         </div>
       </div>
-        <div  className={classNames(styles.buttons)}>
+        <div className={classNames(styles.buttons)}>
           <div onClick={joinSpecificRoom} className={classNames(styles.btn, {[styles.disabled]: (!name || !roomsList.has(room))})}>join to specific room</div>
           <div onClick={createRoom} className={classNames(styles.btn, {[styles.disabled]: !name})}>open a room</div>
           <div onClick={joinRandomRoom} className={classNames(styles.btn, {[styles.disabled]: !name})}>play with a random player</div>

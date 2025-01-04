@@ -5,7 +5,7 @@
     right: 1rem;
     $border-radius-size: 7px;
 
-    .title{
+    .header{
         height: 3rem;
         width: 100%;
         border-radius: $border-radius-size;
@@ -14,8 +14,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
         border: 1px solid var(--chat-box-title-border-color);
-
+        .newMessagesIcon{
+            position: absolute;
+            height: 1.5rem;
+            width: 1.5rem;
+            top: 0.75rem;
+            right: 0.5rem;
+            // background-color: red;
+            filter: invert(100%);
+        }
         &[is-open="true"]{
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
