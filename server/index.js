@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const socketEvents = require("../socketEvents.json");
 const io = new Server(server, {
     cors: {
         origin: "*",
@@ -11,6 +13,17 @@ const io = new Server(server, {
 });
 const cors = require('cors');
 const ShortUniqueId = require('short-unique-id');
+
+const logStates = {
+    DEBUG: 0,
+    INFO: 1,
+    ERROR: 2
+}
+let logStatus = process.env.LOG_STATUS || logStates.INFO
+
+const logger = (msg, status) => {
+    if(logStatus >= status) console.log(msg)
+}
 
 app.use(cors());
 const uid = new ShortUniqueId({ length: 8 });
@@ -78,37 +91,42 @@ const isThereAWinner = (board, playerIndex) => {
 const openRoom = (client, room, name) => {
     client.join(room);
     playersToRoom.set(client.id, room);
-    client.emit("playerEnterData", {playerIndex: statusEnum.FIRST})
+    client.emit(socketEvents.playerEnterData, {playerIndex: statusEnum.FIRST})
     roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), names:{[statusEnum.SECOND]: "", [statusEnum.FIRST]: name}, clientsIds: [client.id], victoryCount: {[statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0}, messages: []});
 }
 
 const joinRoom = (client, room, name) => {
     client.join(room);
     playersToRoom.set(client.id, room);
-    client.emit("playerEnterData", {playerIndex: statusEnum.SECOND})
+    client.emit(socketEvents.playerEnterData, {playerIndex: statusEnum.SECOND})
     const clientsIds = roomsData.get(room).clientsIds;
     clientsIds.push(client.id);
     const names = roomsData.get(room).names;
     names[statusEnum.SECOND] = name;
     const firstPlayer = Math.floor(Math.random() * 2) + 1;
     roomsData.set(room, {...roomsData.get(room), firstPlayer, clientsIds, names, });
-    io.to(room).emit("startPlaying", roomsData.get(room));
+    io.to(room).emit(socketEvents.startPlaying, roomsData.get(room));
 }
 
-io.on('connection', client => {
-    client.emit("updateRoomsList", Array.from(specificRooms));
-    client.on("OnePC", () => {
+io.on(socketEvents.connection, client => {
+    logger(`connection`, logStates.DEBUG);
+    logger(Array.from(specificRooms), logStates.DEBUG);
+    setTimeout(() => client.emit(socketEvents.updateRoomsList, Array.from(specificRooms)), 1000)
+
+    client.on(socketEvents.OnePC, () => {
+        logger(socketEvents.OnePC, logStates.INFO);
         const room = uid.rnd();
         client.join(room);
         playersToRoom.set(client.id, room);
         const firstPlayer = Math.floor(Math.random() * 2) + 1;
         roomsData.set(room, {board: Array(42).fill(statusEnum.EMPTY), clientsIds: [client.id], victoryCount: {[statusEnum.SECOND]: 0, [statusEnum.FIRST]: 0}, OnePC: true, firstPlayer});
-        client.emit("OnePC", roomsData.get(room));
+        client.emit(socketEvents.OnePC, roomsData.get(room));
     })
     
-    client.on("playerEnterRandom", ({name}) => {
+    client.on(socketEvents.playerEnterRandom, ({name}) => {
+        logger(`playerEnterRandom ${name}`, logStates.INFO);
         if(playersToRoom.get(client.id)) return;
-        console.log("playerEnter");
+        logger("playerEnter", logStates.INFO);
         if(!roomWaitingId){
             roomWaitingId = uid.rnd();
             openRoom(client, roomWaitingId, name);
@@ -118,72 +136,74 @@ io.on('connection', client => {
         }
     })
 
-    client.on("playerEnterSpecific", ({room, name}) => {
+    client.on(socketEvents.playerEnterSpecific, ({room, name}) => {
+        logger(`playerEnterSpecific ${name}`, logStates.INFO);
         if(!room){
             const newRoomId = uid.rnd();
             specificRooms.add(newRoomId);
             openRoom(client, newRoomId, name);
-            client.emit("waitForSpecificRoom", {room: newRoomId});
-            io.emit("updateRoomsList", Array.from(specificRooms));
+            client.emit(socketEvents.waitForSpecificRoom, {room: newRoomId});
+            io.emit(socketEvents.updateRoomsList, Array.from(specificRooms));
         } else {
             joinRoom(client, room, name);
             specificRooms.delete(room);
-            io.emit("updateRoomsList", Array.from(specificRooms));
+            io.emit(socketEvents.updateRoomsList, Array.from(specificRooms));
         }
     })
   
-    client.on("playerPlay", ({playerIndex, index}) => {
+    client.on(socketEvents.playerPlay, ({playerIndex, index}) => {
         const board = roomsData.get(playersToRoom.get(client.id)).board;
         const finalIndex = findFreeSquare(index % 7, board);
         board[finalIndex] = playerIndex;
         roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), board});
-        io.to(playersToRoom.get(client.id)).emit("play", {board, next: !!finalIndex})
+
+        io.to(playersToRoom.get(client.id)).emit(socketEvents.play, {board, next: !!finalIndex})
         const {isWinner, newBoard} = isThereAWinner(board, playerIndex);
         if(isWinner){
             const victoryCount = roomsData.get(playersToRoom.get(client.id)).victoryCount;
             victoryCount[playerIndex]++;
             roomsData.set(playersToRoom.get(client.id), {...roomsData.get(playersToRoom.get(client.id)), firstPlayer: (roomsData.get(playersToRoom.get(client.id)).firstPlayer % 2) + 1, victoryCount, board: newBoard});
-            io.to(playersToRoom.get(client.id)).emit("winner", { playerIndex, board: newBoard })
+            io.to(playersToRoom.get(client.id)).emit(socketEvents.winner, { playerIndex, board: newBoard })
         }
     })
 
-    client.on("rematch", () => {
+    client.on(socketEvents.rematch, () => {
         const roomData = roomsData.get(playersToRoom.get(client.id));
         if(roomData.OnePC){
             roomsData.set(playersToRoom.get(client.id), {...roomData, board: Array(42).fill(statusEnum.EMPTY)});
-            client.emit("rematch", roomsData.get(playersToRoom.get(client.id)));
+            client.emit(socketEvents.rematch, roomsData.get(playersToRoom.get(client.id)));
         } else if(roomData.rematch){
             roomsData.set(playersToRoom.get(client.id), {...roomData, rematch: false});
-            io.to(playersToRoom.get(client.id)).emit("rematch", roomData);
+            io.to(playersToRoom.get(client.id)).emit(socketEvents.rematch, roomData);
         } else {
             roomsData.set(playersToRoom.get(client.id), {...roomData, board: Array(42).fill(statusEnum.EMPTY), rematch: true});
-            client.emit("waitForRematch");
+            client.emit(socketEvents.waitForRematch);
         }
     })
 
-    client.on("message", ({message, player}) => {
+    client.on(socketEvents.message, ({message, player}) => {
         const room = playersToRoom.get(client.id);
         const messages = roomsData.get(room).messages;
         messages.push({player, message});
         roomsData.set(room, {...roomsData.get(room), messages});
-        io.to(room).emit("message", { messages: roomsData.get(room).messages})
+        io.to(room).emit(socketEvents.message, { messages: roomsData.get(room).messages})
     })
 
-    client.on('disconnect', () => {
+    client.on(socketEvents.disconnect, () => {
         const roomId = playersToRoom.get(client.id);
 
         if(roomId){     
             if(roomId === roomWaitingId){
                 roomWaitingId = 0;
             }else {
-                io.to(roomId).emit("playerLeft");
+                io.to(roomId).emit(socketEvents.playerLeft);
                 const clientsIds = roomsData.get(roomId).clientsIds;
                 clientsIds.forEach(id => {
                     playersToRoom.delete(id);
                 });
                 if(specificRooms.has(roomId)){
                     specificRooms.delete(roomId);
-                    io.emit("updateRoomsList", Array.from(specificRooms));
+                    io.emit(socketEvents.updateRoomsList, Array.from(specificRooms));
                 }
             }
             roomsData.delete(roomId);

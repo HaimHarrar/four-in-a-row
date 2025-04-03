@@ -3,22 +3,23 @@ import { clientIO } from '../utils/io'
 import styles from '../styles/SignIn.module.scss'
 import InputSelector from './InputSelector'
 import classNames from 'classnames'
+import socketEvents from '../../socketEvents.json'
 
 const SignIn = () => {
   const [name, setName] = useState("")
   const [room, setRoom] = useState("")
   const [roomsList, setRoomsList] = useState(new Set());
-  
+
   useEffect(() => {
-    const setSpceficRooms = (rooms) => {
+    const setSpecificRooms = (rooms) => {
       setRoomsList(() => new Set(rooms));
     }
 
     setName(() => localStorage.getItem("name"))
+    clientIO.on(socketEvents.updateRoomsList, setSpecificRooms)
 
-    clientIO.on("updateRoomsList", setSpceficRooms)
     return () => {
-      clientIO.off("updateRoomsList", setSpceficRooms)
+      clientIO.off(socketEvents.updateRoomsList, setSpecificRooms)
     }
   }, [])
 
@@ -31,20 +32,20 @@ const SignIn = () => {
   const joinSpecificRoom = () => {
     setLocalStorageName()
     if(new Set(roomsList).has(room)){
-      clientIO.emit("playerEnterSpecific", { name, room })
+      clientIO.emit(socketEvents.playerEnterSpecific, { name, room })
     }
   }
   const createRoom = () => {
     setLocalStorageName()
-    clientIO.emit("playerEnterSpecific", { name })
+    clientIO.emit(socketEvents.playerEnterSpecific, { name })
   }
 
   const joinRandomRoom = () => {
     setLocalStorageName()
-    clientIO.emit("playerEnterRandom", { name })
+    clientIO.emit(socketEvents.playerEnterRandom, { name })
   }
   const playOnOnPC = () => {
-    clientIO.emit("OnePC")
+    clientIO.emit(socketEvents.OnePC)
   }
 
   return (

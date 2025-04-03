@@ -5,41 +5,42 @@ import send from '../assets/icons/send.svg'
 import arrowUp from '../assets/icons/arrow-up.svg'
 import arrowDown from '../assets/icons/arrow-down.svg'
 import newMessages from '../assets/icons/new-messages.svg'
+import socketEvents from '../../socketEvents.json'
 
 const ChatBox = ({player}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState([])
   const [messageToSend, setMessageToSend] = useState("")
-  const [isReaden, setIsReaden] = useState(true)
+  const [hasRead, setHasRead] = useState(true)
   const messagesRef = useRef(null);
   
   useEffect(() => {
     const onMessage = ({messages}) => {
       setMessages(messages)
       if(!isOpen){
-        setIsReaden(false);
+        setHasRead(false);
       }
       requestAnimationFrame(() => {
         messagesRef.current.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' });
       })
     }
 
-    clientIO.on("message", onMessage)
+    clientIO.on(socketEvents.message, onMessage)
     return () => {
-      clientIO.off("message", onMessage)
+      clientIO.off(socketEvents.message, onMessage)
     }
   }, [isOpen])
 
   useEffect(() => {
     if(isOpen) {
       messagesRef.current.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' });
-      setIsReaden(true) 
+      setHasRead(true) 
     }
   }, [isOpen])
 
   const sendMessage = () => {
     if(!messageToSend) return
-    clientIO.emit("message", {message: messageToSend, player})
+    clientIO.emit(socketEvents.message, {message: messageToSend, player})
     setMessageToSend("")
   }
 
@@ -47,7 +48,7 @@ const ChatBox = ({player}) => {
     <div className={styles.chatBoxContainer}>
       <div is-open={isOpen.toString()} className={styles.header}>
         <p>chat box</p>
-        {!isReaden && !isOpen && <img src={newMessages} className={styles.newMessagesIcon} alt="" /> }
+        {!hasRead && !isOpen && <img src={newMessages} className={styles.newMessagesIcon} alt="" /> }
         <div onClick={() => setIsOpen(!isOpen)} className={styles.arrowContainer}>
           <img src={isOpen ? arrowDown : arrowUp} className={styles.arrowIcon} alt="" />
         </div>

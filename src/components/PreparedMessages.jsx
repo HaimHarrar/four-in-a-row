@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import styles from '../styles/PreperedMessages.module.scss'
+import styles from '../styles/PreparedMessages.module.scss'
 import arrowUp from '../assets/icons/arrow-up.svg'
 import arrowDown from '../assets/icons/arrow-down.svg'
 import { clientIO } from '../utils/io'
-
+import socketEvents from '../../socketEvents.json'
 const options = [
     "😀 מהלך יפה",
     "👑 איזה מלך",
@@ -16,17 +16,17 @@ const options = [
     "אין עליך",
     "אין עליי",
     "...מממ",
-    "🤏 כזה קטן"
-    // "לא ציפיתי",
+    "🤏 כזה קטן",
+    "לא ציפיתי",
 ]
 
-const PreperedMessages = ({player}) => {
+const PreparedMessages = ({player}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className={styles.preperedMessagesContainer}>
+    <div className={styles.preparedMessagesContainer}>
         <div className={styles.header}>
-            <h2>Prepered messages</h2>
+            <h2>Prepared messages</h2>
             <div onClick={() => setIsOpen(!isOpen)} className={styles.arrowContainer}>
                 <img src={isOpen ? arrowDown : arrowUp} className={styles.arrowIcon} alt="" />
             </div>
@@ -35,7 +35,7 @@ const PreperedMessages = ({player}) => {
             <div className={styles.messages}>
                 {
                     options.map((option, index) => (
-                        <div onClick={() => clientIO.emit("message", {message: option, player})} className={styles.message} key={index}>
+                        <div onClick={() => clientIO.emit(socketEvents.message, {message: option, player})} className={styles.message} key={index}>
                             {option}
                         </div>
                     ))
@@ -46,4 +46,4 @@ const PreperedMessages = ({player}) => {
   )
 }
 
-export default PreperedMessages
+export default PreparedMessages

@@ -1,0 +1,18 @@
+{
+    "connection": "connection",
+    "updateRoomsList": "updateRoomsList",
+    "playerEnterSpecific": "playerEnterSpecific",
+    "OnePC": "OnePC",
+    "playerLeft": "playerLeft",
+    "play": "play",
+    "playerPlay": "playerPlay",
+    "startPlaying": "startPlaying",
+    "playerEnterData": "playerEnterData",
+    "winner": "winner",
+    "waitForSpecificRoom": "waitForSpecificRoom",
+    "rematch": "rematch",
+    "waitForRematch": "waitForRematch",
+    "message": "message",
+    "disconnect": "disconnect",
+    "playerEnterRandom": "playerEnterRandom"
+}

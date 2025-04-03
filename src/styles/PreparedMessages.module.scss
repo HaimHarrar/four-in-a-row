@@ -1,4 +1,4 @@
-.preperedMessagesContainer{
+.preparedMessagesContainer{
     width: 20rem;
     position: fixed;
     bottom: 1rem;
@@ -34,9 +34,8 @@
                 width: 100%;
             }
         }
-
-       
     }
+    
     .messages{
         width: 100%;
         max-height: 25rem;
@@ -65,9 +64,9 @@
 
         }
     }
+
     @keyframes showEffect {
         0% { height: 0rem; }
         100% { height: calc(11 * 2rem);}
     }
-
 }

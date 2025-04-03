@@ -12,8 +12,8 @@ import exit from './assets/icons/exit.svg'
 import "./App.scss"
 import InputSelector from './components/InputSelector';
 import ChatBox from './components/ChatBox';
-import PreperedMessages from './components/PreperedMessages';
-
+import PreparedMessages from './components/PreparedMessages';
+import socketEvents from '../socketEvents.json'
 export const statusEnum = {
   EMPTY: 0,
   FIRST: 1,
@@ -101,33 +101,33 @@ function App() {
       setIsWaitingForRematch(true)
     }
 
-    clientIO.on("play", onPlay)
-    clientIO.on("startPlaying", startPlaying)
-    clientIO.on("playerEnterData", setPlayerData)
-    clientIO.on("winner", onWinner)
-    clientIO.on("waitForSpecificRoom", onWaitForSpecificRoom)
-    clientIO.on("playerLeft", playerLeft)
-    clientIO.on("rematch", onRematch)
-    clientIO.on("waitForRematch", onWaitForRematch)
-    clientIO.on("OnePC", onOnePC)
+    clientIO.on(socketEvents.play, onPlay)
+    clientIO.on(socketEvents.startPlaying, startPlaying)
+    clientIO.on(socketEvents.playerEnterData, setPlayerData)
+    clientIO.on(socketEvents.winner, onWinner)
+    clientIO.on(socketEvents.waitForSpecificRoom, onWaitForSpecificRoom)
+    clientIO.on(socketEvents.playerLeft, playerLeft)
+    clientIO.on(socketEvents.rematch, onRematch)
+    clientIO.on(socketEvents.waitForRematch, onWaitForRematch)
+    clientIO.on(socketEvents.OnePC, onOnePC)
 
     return () => {
-      clientIO.off("play", onPlay)
-      clientIO.off("startPlaying", startPlaying)
-      clientIO.off("playerEnterData", setPlayerData)
-      clientIO.off("winner", onWinner)
-      clientIO.on("waitForSpecificRoom", onWaitForSpecificRoom)
-      clientIO.off("playerLeft", playerLeft)
-      clientIO.off("rematch", onRematch)
-      clientIO.off("waitForRematch", onWaitForRematch)
-      clientIO.off("OnePC", onOnePC)
+      clientIO.off(socketEvents.play, onPlay)
+      clientIO.off(socketEvents.startPlaying, startPlaying)
+      clientIO.off(socketEvents.playerEnterData, setPlayerData)
+      clientIO.off(socketEvents.winner, onWinner)
+      clientIO.on(socketEvents.waitForSpecificRoom, onWaitForSpecificRoom)
+      clientIO.off(socketEvents.playerLeft, playerLeft)
+      clientIO.off(socketEvents.rematch, onRematch)
+      clientIO.off(socketEvents.waitForRematch, onWaitForRematch)
+      clientIO.off(socketEvents.OnePC, onOnePC)
     }
   }, [isOnePC])
 
   const playerPlay = (index) => {
     if (isAllowedToPlay && !isWaitingForAction && !winnerIndex) {
       setIsWaitingForAction(true)
-      clientIO.emit("playerPlay", { playerIndex, index })
+      clientIO.emit(socketEvents.playerPlay, { playerIndex, index })
     }
   }
 
@@ -136,7 +136,7 @@ function App() {
   }
 
   const onRematch = () => {
-    clientIO.emit("rematch")
+    clientIO.emit(socketEvents.rematch)
   }
 
   return (
@@ -176,7 +176,7 @@ function App() {
                     !isOnePC &&
                     <>
                       <ChatBox player={playerIndex}/>
-                      <PreperedMessages player={playerIndex}/>
+                      <PreparedMessages player={playerIndex}/>
                     </>
                     
                   }
