@@ -116,7 +116,7 @@ function App() {
       clientIO.off(socketEvents.startPlaying, startPlaying)
       clientIO.off(socketEvents.playerEnterData, setPlayerData)
       clientIO.off(socketEvents.winner, onWinner)
-      clientIO.on(socketEvents.waitForSpecificRoom, onWaitForSpecificRoom)
+      clientIO.off(socketEvents.waitForSpecificRoom, onWaitForSpecificRoom)
       clientIO.off(socketEvents.playerLeft, playerLeft)
       clientIO.off(socketEvents.rematch, onRematch)
       clientIO.off(socketEvents.waitForRematch, onWaitForRematch)

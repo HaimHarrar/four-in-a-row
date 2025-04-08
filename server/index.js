@@ -70,7 +70,7 @@ const isThereAWinner = (board, playerIndex) => {
                 newBoard[i + 6] = playerIndex + 2;
                 newBoard[i + 12] = playerIndex + 2;
                 newBoard[i + 18] = playerIndex + 2;
-            } else if((i + 21 < 42) && (Math.abs(Math.floor((i + 21) / ROWS_NUM) - Math.floor(i / ROWS_NUM) === 3)) && (board[i] === board[i + 7]) && (board[i] === board[i + 14]) && (board[i] === board[i + 21])){
+            } else if((i + 21 < 42) && (Math.abs(Math.floor((i + 21) / ROWS_NUM) - Math.floor(i / ROWS_NUM)) === 3) && (board[i] === board[i + 7]) && (board[i] === board[i + 14]) && (board[i] === board[i + 21])){
                 isWinner = true
                 newBoard[i] = playerIndex + 2;
                 newBoard[i + 7] = playerIndex + 2;
