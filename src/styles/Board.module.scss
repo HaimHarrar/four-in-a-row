@@ -3,4 +3,77 @@
     height: 38.5rem;
     display: grid;
     grid-template-columns: repeat(7, auto);
+    $border-radius: 10px;
+    >:nth-child(1) {
+        border-top-left-radius: $border-radius;
+    }
+    >:nth-child(7) {
+        border-top-right-radius: $border-radius;
+    }
+    >:nth-child(36) {
+        border-bottom-left-radius: $border-radius;
+    }
+    >:nth-child(42) {
+        border-bottom-right-radius: $border-radius;
+    }
+}
+
+.squareContainer {
+    background-color: var(--square-bgc);
+    box-shadow: inset 0 0 4px 0.5px var(--square-border-bgc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .bgCircle{
+        height: 80%;
+        width: 80%;
+        border-radius: 50%;
+        background-image: radial-gradient(circle, var(--circle-empty-bgi-in), var(--circle-empty-bgi-out));
+        box-shadow: inset 3px 3px 3px 0px var(--circle-empty-box-shadow-color);
+        position: absolute;
+    }
+}
+
+.circleContainer{
+    height: 80%;
+    width: 80%;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &[is-over="true"]{
+        cursor: default;
+    }
+    $event-duration: 1s;
+
+    &[fillcolor="1"], &[fillcolor="3"]{
+        // first
+        background-image: radial-gradient(circle, var(--circle-first-bgi-in), var(--circle-first-bgi-out));
+        box-shadow: inset 3px 3px 3px 0px var(--circle-first-box-shadow-color);
+        animation-name: example;
+        animation-duration: $event-duration;
+    }
+
+    &[fillcolor="2"], &[fillcolor="4"]{
+        // second
+        background-image: radial-gradient(circle, var(--circle-second-bgi-in), var(--circle-second-bgi-out));
+        box-shadow: inset 3px 3px 3px 0px var(--circle-second-box-shadow-color);
+        animation-name: example;
+        animation-duration: $event-duration;
+    }
+
+    &[fillcolor="3"], &[fillcolor="4"]{
+        &::before {
+            content: url("../assets/icons/cross.svg");
+            position: absolute;
+        }
+    }
+}
+
+@keyframes example {
+    0%   {top:-38.5rem;}
+    100% {top:0px;}
 }

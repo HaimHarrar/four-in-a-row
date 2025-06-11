@@ -1,0 +1,239 @@
+.app-container{
+
+    &[theme="wooden"] {
+
+        // global
+        --inputs-bgc: #5c2709;
+        --inputs-color: #e4e8d5;
+        --inputs-placeholder-color: #e4e8d5;
+        
+        // SignIn.jsx
+        --sign-in-btns-color: #e4e8d5;
+        --sign-in-btns-bgc: #5c2709;
+        --sign-in-btns-bgc-hover: #2f1302;
+        --sign-in-btns-border-color: #240a02;
+
+        // App.jsx
+        --page-bgc: #966f33;
+        
+        --victory-count-board-counter-first-bgi-in: white;
+        --victory-count-board-counter-first-bgi-out: #d2a62c;
+        --victory-count-board-counter-first-box-shadow: #5b5645;
+        --victory-count-first-color: black;
+        --turn-arrow-first-filter: brightness(0) saturate(100%) invert(63%) sepia(61%) saturate(474%) hue-rotate(6deg) brightness(92%) contrast(98%);
+
+        --victory-count-board-counter-second-bgi-in: white;
+        --victory-count-board-counter-second-bgi-out: #d81f06;
+        --victory-count-board-counter-second-box-shadow: #381313;
+        --turn-arrow-second-filter: brightness(0) saturate(100%) invert(13%) sepia(72%) saturate(5226%) hue-rotate(3deg) brightness(106%) contrast(95%);
+
+        --player-name-first-bgc: #d2a62c;
+        --player-name-first-box-shadow-color: #5b5645;
+        --player-name-first-color: rgb(42, 48, 6);
+        --crown-first-filter: brightness(0) saturate(100%) invert(63%) sepia(61%) saturate(474%) hue-rotate(6deg) brightness(92%) contrast(98%);
+
+        --player-name-second-bgc: #d81f06;
+        --player-name-second-box-shadow-color: #381313;
+        --player-name-second-color: rgb(73, 18, 18);
+        --crown-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        // Loader
+        --loader-bgc: #51666477;
+        --loader-title-color: black;
+        --loader-filter: invert(0);
+
+        --action-btns-bgc: #0f0f3b;
+        --action-btns-bgc-hover: black;
+        --action-btns-box-shadow-color: #81819f;
+        --action-icon-filter: invert(100%);
+
+
+        // Board.jsx
+        --square-bgc: #230f08;
+        --square-border-bgc: rgb(79, 86, 106);
+
+        --circle-empty-bgi-in: white;
+        --circle-empty-bgi-out: #ceae9d;
+        --circle-empty-box-shadow-color: #c1916a;
+
+        --circle-first-bgi-in: white;
+        --circle-first-bgi-out: #d2a62c;
+        --circle-first-box-shadow-color: #5b5645;
+
+        --circle-second-bgi-in: white;
+        --circle-second-bgi-out: #d81f06;
+        --circle-second-box-shadow-color: #381313;
+
+        // chat box
+        --chat-box-title-bgc: black;
+        --chat-box-title-color: white;
+        --chat-box-title-border-color: white;
+        
+        --chat-box-bgc: azure;
+        --chat-box-border-color: black;
+
+        --chat-box-first-message-bgc: #d2a62c;
+        --chat-box-first-message-color: white;
+        --chat-box-second-message-bgc: #d81f06; 
+        --chat-box-second-message-color: white;
+
+
+    }
+    &[theme=""] {
+
+        // global
+        --inputs-bgc: #3ba0ba;
+        --inputs-color: #152a2f;
+        --inputs-placeholder-color: rgb(8, 10, 39);
+        
+        // SignIn.jsx
+        --sign-in-btns-color: #1b1a25;
+        --sign-in-btns-bgc: #154dc5;
+        --sign-in-btns-bgc-hover: #06b8f3;
+        --sign-in-btns-border-color: #523e8a;
+
+        // App.jsx
+        --page-bgc: #41367e;
+        
+        --victory-count-board-counter-first-bgi-in: white;
+        --victory-count-board-counter-first-bgi-out: #6b8000;
+        --victory-count-board-counter-first-box-shadow: #2c450f;
+        --victory-count-first-color: black;
+        --turn-arrow-first-filter: brightness(0) saturate(100%) invert(39%) sepia(47%) saturate(1525%) hue-rotate(33deg) brightness(104%) contrast(91%);
+
+        --victory-count-board-counter-second-bgi-in: white;
+        --victory-count-board-counter-second-bgi-out: rgb(128, 0, 17);
+        --victory-count-board-counter-second-box-shadow: rgb(52, 16, 21);
+        --turn-arrow-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        --player-name-first-bgc: #83830b;
+        --player-name-first-box-shadow-color: #44440d;
+        --player-name-first-color: rgb(42, 48, 6);
+        --crown-first-filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
+
+        --player-name-second-bgc: #c24646;
+        --player-name-second-box-shadow-color: #630202;
+        --player-name-second-color: rgb(73, 18, 18);
+        --crown-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        // Loader
+        --loader-bgc: #51666477;
+        --loader-title-color: black;
+        --loader-filter: invert(0);
+
+        --action-btns-bgc: #0f0f3b;
+        --action-btns-bgc-hover: black;
+        --action-btns-box-shadow-color: #81819f;
+        --action-icon-filter: invert(100%);
+
+
+        // Board.jsx
+        --square-bgc: #080a23;
+        --square-border-bgc: rgb(79, 86, 106);
+
+        --circle-empty-bgi-in: white;
+        --circle-empty-bgi-out: #a49dce;
+        --circle-empty-box-shadow-color: #6ac1bb;
+
+        --circle-first-bgi-in: white;
+        --circle-first-bgi-out: #cad22c;
+        --circle-first-box-shadow-color: #5b5b45;
+
+        --circle-second-bgi-in: white;
+        --circle-second-bgi-out: #d80606;
+        --circle-second-box-shadow-color: #381313;
+
+        // chat box
+        --chat-box-title-bgc: black;
+        --chat-box-title-color: white;
+        --chat-box-title-border-color: white;
+        
+        --chat-box-bgc: azure;
+        --chat-box-border-color: black;
+
+        --chat-box-first-message-bgc: #d2a62c;
+        --chat-box-first-message-color: white;
+        --chat-box-second-message-bgc: #d81f06; 
+        --chat-box-second-message-color: white;
+
+    }
+    &[theme="monochrome"] {
+
+        // global
+        --inputs-bgc: #fff;
+        --inputs-color: #152a2f;
+        --inputs-placeholder-color: rgb(8, 10, 39);
+        
+        // SignIn.jsx
+        --sign-in-btns-color: black;
+        --sign-in-btns-bgc: #fff;
+        --sign-in-btns-bgc-hover: #777;
+        --sign-in-btns-border-color: #000;
+
+        // App.jsx
+        --page-bgc: #777777;
+        
+        --victory-count-board-counter-first-bgi-in: white;
+        --victory-count-board-counter-first-bgi-out: #000;
+        --victory-count-board-counter-first-box-shadow: #777;
+        --victory-count-first-color: black;
+        --turn-arrow-first-filter: invert(100%);
+
+        --victory-count-board-counter-second-bgi-in: black;
+        --victory-count-board-counter-second-bgi-out: white;
+        --victory-count-board-counter-second-box-shadow: #777;
+        --turn-arrow-second-filter: invert(0);
+
+        --player-name-first-bgc: white;
+        --player-name-first-box-shadow-color: black;
+        --player-name-first-color: black;
+        --crown-first-filter: brightness(0) saturate(100%) invert(40%) sepia(91%) saturate(602%) hue-rotate(26deg) brightness(96%) contrast(91%);
+
+        --player-name-second-bgc: #000;
+        --player-name-second-box-shadow-color: #fff;
+        --player-name-second-color: #fff;
+        --crown-second-filter: brightness(0) saturate(100%) invert(35%) sepia(33%) saturate(847%) hue-rotate(314deg) brightness(110%) contrast(118%);
+
+        // Loader
+        --loader-bgc: #7777777;
+        --loader-title-color: black;
+        --loader-filter: invert(0);
+
+        --action-btns-bgc: #000;
+        --action-btns-box-shadow-color: #777;
+        --action-btns-bgc-hover: #222;
+        --action-icon-filter: invert(100%);
+
+
+        // Board.jsx
+        --square-bgc: #000;
+        --square-border-bgc: #777;
+
+        --circle-empty-bgi-in: white;
+        --circle-empty-bgi-out: #999;
+        --circle-empty-box-shadow-color: #333;
+
+        --circle-first-bgi-in: white;
+        --circle-first-bgi-out: black;
+        --circle-first-box-shadow-color: #777;
+
+        --circle-second-bgi-in: black;
+        --circle-second-bgi-out: white;
+        --circle-second-box-shadow-color: #777;
+
+
+        // chat box
+        --chat-box-title-bgc: black;
+        --chat-box-title-color: white;
+        --chat-box-title-border-color: white;
+        
+        --chat-box-bgc: #aaa;
+        --chat-box-border-color: black;
+
+        --chat-box-first-message-bgc: white;
+        --chat-box-first-message-color: black;
+        --chat-box-second-message-bgc: black; 
+        --chat-box-second-message-color: white;
+    }
+   
+}

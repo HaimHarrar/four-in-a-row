@@ -1,0 +1,72 @@
+.preparedMessagesContainer{
+    width: 20rem;
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    $border-radius-size: 7px;
+
+    .header{
+        height: 3rem;
+        width: 100%;    
+        border-top-left-radius: $border-radius-size;
+        border-top-right-radius: $border-radius-size;
+        background-color: var(--chat-box-title-bgc);
+        color: var(--chat-box-title-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        border: 1px solid var(--chat-box-title-border-color);
+
+        .arrowContainer {
+            position: absolute;
+            height: 2rem;
+            width: 2rem;
+            top: 0.5rem;
+            left: 0.5rem;
+            cursor: pointer;
+            background-color: #ccc;
+            &:hover{
+                background-color: #fff;
+            }
+            img{
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+    
+    .messages{
+        width: 100%;
+        max-height: 25rem;
+        overflow: auto;
+        background-color: var(--chat-box-bgc);
+        border: 1px solid var(--chat-box-border-color);
+        animation: 2s;
+        animation-name: showEffect;
+        border-bottom-left-radius: $border-radius-size;
+        border-bottom-right-radius: $border-radius-size;
+
+        .message{
+            background-color: #eee;
+            color: black;
+            height: 2rem;
+            border-top: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            &:hover{
+                background-color: #777;
+                color: #fff;
+            }
+
+        }
+    }
+
+    @keyframes showEffect {
+        0% { height: 0rem; }
+        100% { height: calc(11 * 2rem);}
+    }
+}
