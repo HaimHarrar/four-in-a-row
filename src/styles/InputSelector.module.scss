@@ -1,7 +1,8 @@
 .inputSelector {
     position: relative;
     height: 100%;
-    .input{
+
+    .input {
         text-indent: 2%;
         width: 100%;
         height: 100%;
@@ -14,6 +15,7 @@
         border-radius: 5px;
         outline: none;
         caret-color: var(--inputs-color);
+
         &::placeholder {
             color: var(--inputs-placeholder-color);
         }
@@ -29,7 +31,7 @@
         overflow-y: auto;
         border: 1px solid rgb(19, 27, 26);
         border-top: none;
-        
+
         .option {
             width: 100%;
             overflow: hidden;
@@ -40,11 +42,10 @@
             cursor: pointer;
             background-color: #eee;
             border-bottom: 1px solid rgb(157, 206, 203);
-            
+
             &:hover {
                 background-color: rgb(131, 147, 146);
             }
         }
     }
-  
 }

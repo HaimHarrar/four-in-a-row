@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import styles from '../styles/InputSelector.module.scss'
 import OutsideClickHandler from 'react-outside-click-handler';
 import Fuse from 'fuse.js';
-import arrowUp from '../assets/icons/arrow-up.svg'
-import arrowDown from '../assets/icons/arrow-down.svg'
+
 const InputSelector = ({ options, placeholder, selected, setSelected }) => {
     const [isSelectorOpen, setIsSelectorOpen] = useState(false)
     const [text, setText] = useState(selected || "")
@@ -26,13 +25,13 @@ const InputSelector = ({ options, placeholder, selected, setSelected }) => {
     }, [selected])
 
     useEffect(() => {
-        if(options.includes(text)) setSelected(text)
+        if (options.includes(text)) setSelected(text)
         else setSelected("")
     }, [text])
 
     return (
         <div className={styles.inputSelector}>
-            <input className={styles.input} value={text} type="text" onChange={(e) => setText(e.target.value)} placeholder={placeholder} onClick={() => setIsSelectorOpen(!isSelectorOpen)}/>
+            <input className={styles.input} value={text} type="text" onChange={(e) => setText(e.target.value)} placeholder={placeholder} onClick={() => setIsSelectorOpen(!isSelectorOpen)} />
 
             {isSelectorOpen && !!(renderOptions.length) &&
                 <OutsideClickHandler
@@ -42,7 +41,7 @@ const InputSelector = ({ options, placeholder, selected, setSelected }) => {
                 >
                     <div className={styles.options}>
                         {
-                            renderOptions.map((option) => (<div key={option} onClick={() => {setIsSelectorOpen(false); setSelected(option)}} className={styles.option}>
+                            renderOptions.map((option) => (<div key={option} onClick={() => { setIsSelectorOpen(false); setSelected(option) }} className={styles.option}>
                                 {option}
                             </div>))
                         }

@@ -6,13 +6,15 @@
     border-radius: 3px;
     background-color: var(--action-btns-bgc);
     cursor: pointer;
+    overflow: hidden;
     box-shadow: 0 0 3px 1px var(--action-btns-box-shadow-color);
     z-index: 1;
-    
-    &:hover{
+
+    &:hover {
         background-color: var(--action-btns-bgc-hover);
     }
-    img{   
+
+    img {
         filter: var(--action-icon-filter);
         height: 100%;
         width: 100%;
@@ -27,7 +29,7 @@
     justify-content: center;
     align-items: center;
 
-    .themeSelectorContainer{
+    .themeSelectorContainer {
         position: fixed;
         top: 1rem;
         left: 1rem;
@@ -47,58 +49,62 @@
         justify-content: center;
         align-items: center;
 
-        .victoryCountBoard{
+        .victoryCountBoard {
             position: absolute;
             top: 5px;
             height: 2rem;
             width: 5rem;
             display: flex;
             gap: 0.1rem;
-            .counter{
+
+            .counter {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                
-                &.second{
-                    background-image: radial-gradient(circle, var(--victory-count-board-counter-second-bgi-in),var(--victory-count-board-counter-second-bgi-out));
+
+                &.second {
+                    background-image: radial-gradient(circle, var(--victory-count-board-counter-second-bgi-in), var(--victory-count-board-counter-second-bgi-out));
                     box-shadow: inset 0 0 3px 3px var(--victory-count-board-counter-second-box-shadow);
                     color: var(--victory-count-second-color);
                     flex: 1;
                 }
-                &.first{
-                    background-image: radial-gradient(circle, var(--victory-count-board-counter-first-bgi-in),var(--victory-count-board-counter-first-bgi-out));
+
+                &.first {
+                    background-image: radial-gradient(circle, var(--victory-count-board-counter-first-bgi-in), var(--victory-count-board-counter-first-bgi-out));
                     box-shadow: inset 0 0 3px 3px var(--victory-count-board-counter-first-box-shadow);
                     color: var(--victory-count-first-color);
                     flex: 1;
                 }
             }
         }
-    
+
         .arrow {
             position: absolute;
             height: 2rem;
             width: 2rem;
             top: 2.5rem;
+
             &[turn="1"] {
                 right: 8rem;
                 filter: var(--turn-arrow-first-filter);
             }
+
             &[turn="2"] {
                 left: 8rem;
                 filter: var(--turn-arrow-second-filter);
             }
         }
-    
-        
-    
-        @keyframes rotate{
-            100% { transform: rotate(360deg) };
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg)
+            };
         }
-    
+
         .player {
             position: absolute;
-    
-            .name{
+
+            .name {
                 width: 8rem;
                 height: 2rem;
                 border-radius: 5px;
@@ -106,30 +112,33 @@
                 justify-content: center;
                 align-items: center;
             }
+
             .turn {
                 padding: 1rem 0;
                 text-align: center;
             }
+
             &.second {
                 top: 5rem;
                 left: 5rem;
+
                 .name {
                     background-color: var(--player-name-second-bgc);
                     box-shadow: 0 0 8px 4px var(--player-name-second-box-shadow-color);
                     color: var(--player-name-second-color);
                 }
             }
+
             &.first {
                 top: 5rem;
                 right: 5rem;
-    
-                .name { 
+
+                .name {
                     background-color: var(--player-name-first-bgc);
                     box-shadow: 0 0 8px 4px var(--player-name-first-box-shadow-color);
                     color: var(--player-name-first-color);
                 }
             }
-    
         }
     }
 }
@@ -143,12 +152,14 @@
         left: 0;
         background-color: var(--loader-bgc);
     }
+
     height: 20rem;
     width: 20rem;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+
     .title {
         font-size: 1.5rem;
         position: absolute;
@@ -156,37 +167,46 @@
         color: var(--loader-title-color);
         z-index: 1;
     }
+
     .loader {
         height: 8rem;
         width: 8rem;
-        animation:  3s backwards infinite;
+        animation: 3s backwards infinite;
         animation-name: loader;
         filter: var(--loader-filter);
         z-index: 1;
+
         & {
             @keyframes loader {
-                100% { transform: rotate(360deg) };
+                100% {
+                    transform: rotate(360deg)
+                }
+
+                ;
             }
         }
     }
 }
 
-.winnerContainer{
+.winnerContainer {
     height: 25rem;
     width: 25rem;
     position: absolute;
-   
+
     .crown {
         position: absolute;
         height: 25rem;
         width: 25rem;
         padding: 0;
+
         &[playerindex="1"] {
             filter: var(--crown-first-filter);
         }
+
         &[playerindex="2"] {
             filter: var(--crown-second-filter);
         }
+
         animation: 3s forwards infinite;
         animation-name: rotate;
 

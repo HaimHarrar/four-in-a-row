@@ -1,11 +1,13 @@
-.chatBoxContainer{
+.chatBoxContainer {
     width: 20rem;
     position: fixed;
     bottom: 1rem;
     right: 1rem;
     $border-radius-size: 7px;
+    background-color: red;
+    transition: all 2s;
 
-    .header{
+    .header {
         height: 3rem;
         width: 100%;
         border-radius: $border-radius-size;
@@ -16,7 +18,8 @@
         align-items: center;
         position: relative;
         border: 1px solid var(--chat-box-title-border-color);
-        .newMessagesIcon{
+
+        .newMessagesIcon {
             position: absolute;
             height: 1.5rem;
             width: 1.5rem;
@@ -25,11 +28,14 @@
             // background-color: red;
             filter: invert(100%);
         }
-        &[is-open="true"]{
+
+        &[is-open="true"] {
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
         }
+
         position: relative;
+
         .arrowContainer {
             position: absolute;
             height: 2rem;
@@ -38,75 +44,92 @@
             left: 0.5rem;
             cursor: pointer;
             background-color: #ccc;
-            &:hover{
+
+            &:hover {
                 background-color: #fff;
             }
-            img{
+
+            img {
                 height: 100%;
                 width: 100%;
             }
         }
     }
 
-    .messagesContainer{
-        width: 100%;
-        height: 25rem;
-        overflow: auto;
-        background-color: var(--chat-box-bgc);
-        display: flex;
-        flex-direction: column;
-        border: 1px solid var(--chat-box-border-color);
-        animation: 2s;
-        animation-name: showEffect;
+    .messagesContainer {
+        display: none;
 
-        .message{
-            max-width: 60%;
-            padding: 0.3rem;
-            background-color: black;
-            margin: 0.5rem 1rem;
-            border-radius: 5px;
-            
-            &[player="1"]{
-                align-self: flex-start;
-                background-color: var(--chat-box-first-message-bgc);
-                color: var(--chat-box-first-message-color);
+        &.open {
+            display: block;
+            transition: all 2s;
+
+        }
+        
+        .messages {
+            transition: all 2s;
+            height: 25rem;
+            width: 100%;
+            overflow: auto;
+            background-color: var(--chat-box-bgc);
+            flex-direction: column;
+            border: 1px solid var(--chat-box-border-color);
+
+            .message {
+                max-width: 60%;
+                padding: 0.3rem;
+                background-color: black;
+                margin: 0.5rem 1rem;
+                border-radius: 5px;
+
+                &[player="1"] {
+                    align-self: flex-start;
+                    background-color: var(--chat-box-first-message-bgc);
+                    color: var(--chat-box-first-message-color);
+                }
+
+                &[player="2"] {
+                    align-self: flex-end;
+                    background-color: var(--chat-box-second-message-bgc);
+                    color: var(--chat-box-second-message-color);
+                }
             }
-            &[player="2"]{
-                align-self: flex-end;
-                background-color: var(--chat-box-second-message-bgc);
-                color: var(--chat-box-second-message-color);
-            }   
         }
-    }
 
-    @keyframes showEffect {
-        from { height: 0rem; }
-        to { height: 25rem;}
-    }
+        @keyframes showEffect {
+            from {
+                height: 0rem;
+            }
 
-    .inputContainer{
-        position: relative;
-
-        input{
-            width: calc(100% - 2rem);
-            height: 2rem ;
-            outline: none;
-            border: 1px solid black;
-            padding: 0;
-            position: sticky;
-            bottom: 0;
-            border-bottom-left-radius: $border-radius-size;
-            border-bottom-right-radius: $border-radius-size;
-            text-indent: 5px;
-            padding-right: 2rem;
+            to {
+                height: 25rem;
+            }
         }
-        .sendIcon{
-            position: absolute;
-            height: 2rem;
-            width: 2rem;
-            cursor: pointer;
-            top: 0;
-            right: 0;
+
+        .inputContainer {
+            position: relative;
+
+            input {
+                width: calc(100% - 2rem);
+                height: 2rem;
+                outline: none;
+                border: 1px solid black;
+                padding: 0;
+                position: sticky;
+                bottom: 0;
+                border-bottom-left-radius: $border-radius-size;
+                border-bottom-right-radius: $border-radius-size;
+                text-indent: 5px;
+                padding-right: 2rem;
+            }
+
+            .sendIcon {
+                position: absolute;
+                height: 2rem;
+                width: 2rem;
+                cursor: pointer;
+                top: 0;
+                right: 0;
+            }
         }
     }
 }

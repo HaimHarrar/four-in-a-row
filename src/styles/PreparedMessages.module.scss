@@ -26,9 +26,11 @@
             left: 0.5rem;
             cursor: pointer;
             background-color: #ccc;
+
             &:hover{
                 background-color: #fff;
             }
+
             img{
                 height: 100%;
                 width: 100%;
@@ -37,6 +39,7 @@
     }
     
     .messages{
+        display: none;
         width: 100%;
         max-height: 25rem;
         overflow: auto;
@@ -46,6 +49,10 @@
         animation-name: showEffect;
         border-bottom-left-radius: $border-radius-size;
         border-bottom-right-radius: $border-radius-size;
+
+        &.open {
+            display: block;
+        }
 
         .message{
             background-color: #eee;
@@ -61,7 +68,6 @@
                 background-color: #777;
                 color: #fff;
             }
-
         }
     }
 
