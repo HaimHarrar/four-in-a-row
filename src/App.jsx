@@ -177,8 +177,7 @@ function App() {
                     <>
                       <ChatBox player={playerIndex}/>
                       <PreparedMessages player={playerIndex}/>
-                    </>
-                    
+                    </> 
                   }
                   {
                     !!winnerIndex && 
