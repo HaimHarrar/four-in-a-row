@@ -5,7 +5,6 @@
 ### move server file to ec2 instance
 `rsync -avz --exclude 'node_modules' --exclude '.git' -e "ssh -i ~/.ssh/four-in-a-row-key.pem" . ubuntu@ec2-(ec2Ip).us-east-2.compute.amazonaws.com:~/server`
 
-
 ### start client on ec2 instance
 `sudo systemctl daemon-reload`
 `sudo systemctl enable myapp.service`
@@ -14,7 +13,6 @@
 ### To client logs
 `sudo journalctl -u myapp.service`
 `sudo journalctl -fu myapp.service` to follow tail.
-
 
 ### start server on ec2 instance
 `sudo systemctl daemon-reload`
