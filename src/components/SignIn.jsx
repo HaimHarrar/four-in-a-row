@@ -57,9 +57,9 @@ const SignIn = () => {
         </div>
       </div>
       <div className={classNames(styles.buttons)}>
-        <div onClick={joinSpecificRoom} className={classNames(styles.btn, { [styles.disabled]: (!name || !roomsList.has(room)) })}>join to specific room</div>
-        <div onClick={createRoom} className={classNames(styles.btn, { [styles.disabled]: !name })}>open a room</div>
-        <div onClick={joinRandomRoom} className={classNames(styles.btn, { [styles.disabled]: !name })}>play with a random player</div>
+        <div onClick={joinSpecificRoom} className={classNames(styles.btn, { [styles.disabled]: (!name || !roomsList.has(room)) })}>Join to specific room</div>
+        <div onClick={createRoom} className={classNames(styles.btn, { [styles.disabled]: !name })}>Open a room</div>
+        <div onClick={joinRandomRoom} className={classNames(styles.btn, { [styles.disabled]: !name })}>Play with a random player</div>
         <div onClick={playOnOnPC} className={styles.btn}>OnePC</div>
       </div>
     </div>
